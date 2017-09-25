@@ -1,0 +1,41 @@
+
+------------------------------------------------------------
+Sender: LSF System <lsfadmin@bc-31-3-09>
+Subject: Job 9309748: <get_paired_reads_aligned> in cluster <farm3> Exited
+
+Job <get_paired_reads_aligned> was submitted from host <farm3-head3> by user <lm12> in cluster <farm3>.
+Job was executed on host(s) <bc-31-3-09>, in queue <normal>, as user <lm12> in cluster <farm3>.
+</nfs/users/nfs_l/lm12> was used as the home directory.
+</nfs/users/nfs_l/lm12/Scripts> was used as the working directory.
+Started at Wed Jul 20 10:58:43 2016
+Results reported on Wed Jul 20 12:03:19 2016
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+R-3.3.0 CMD BATCH /nfs/users/nfs_l/lm12/Scripts/Rscript_for_aligned_read_pairs.R
+------------------------------------------------------------
+
+TERM_MEMLIMIT: job killed after reaching LSF memory usage limit.
+Exited with exit code 143.
+
+Resource usage summary:
+
+    CPU time :                                   3846.00 sec.
+    Max Memory :                                 40061 MB
+    Average Memory :                             20588.89 MB
+    Total Requested Memory :                     40000.00 MB
+    Delta Memory :                               -61.00 MB
+    Max Swap :                                   40723 MB
+    Max Processes :                              4
+    Max Threads :                                5
+
+The output (if any) is above this job summary.
+
+
+
+PS:
+
+Read file <get-paired_reads_aligned.err> for stderr output of this job.
+

@@ -1,0 +1,361 @@
+#everything here run from the main tili directory (/lustre/scratch115/projects/crohns/exome/TIH)
+
+#update 27/07/17: I've stopped using nw QC3b because it leads to increased missingness for these samples, and instead getting them from the qc1 set.
+#plink --allow-no-sex --bfile /lustre/scratch115/projects/ibdgwas/new_wave/new_wave_qc3b --keep get_from_newwavepostQC.forplink.txt --keep-allele-order --make-bed --out new_wave_qc3b.TILI_ctrls
+#plink --allow-no-sex --bfile /lustre/scratch113/projects/crohns/new_wave/QC/1_initial_marker_QC/new_wave_qc1 --keep get_from_newwavepreQC.forplink.txt --keep-allele-order --make-bed --out new_wave_qc1.TILI_ctrls
+plink --allow-no-sex --bfile /lustre/scratch113/projects/crohns/new_wave/QC/1_initial_marker_QC/new_wave_qc1 --keep get_from_newwaveqc1.forplink.txt --keep-allele-order --make-bed --out new_wave_qc1.TILI_ctrls
+#plink --allow-no-sex --bfile /lustre/scratch113/projects/crohns/new_wave/release/coreex_ibdgwas_20161013/coreex_ibdgwas_20161013.gencall.smajor --keep get_from_newwavepreQC.forplink.txt --keep-allele-order --make-bed --out new_wave_201610.TILI_ctrls
+plink --allow-no-sex --bfile /lustre/scratch113/projects/crohns/new_wave/release/coreex_ibdgwas_20161013/coreex_ibdgwas_20161013.gencall.smajor --keep get_from_newwaveqc1.forplink.txt --keep-allele-order --make-bed --out new_wave_201610.TILI_ctrls
+plink --allow-no-sex --bfile /lustre/scratch115/projects/ibdgwas/pre_imputation/raw/GWAS3/coreex_gaibdc_usgwas_raw --keep get_from_GWAS3preQC.forplink.txt --keep-allele-order --make-bed --out GWAS3.preQC.TILI_ctrls
+plink --allow-no-sex --bfile /lustre/scratch115/projects/ibdgwas/pre_imputation/qc/GWAS3/coreex_gaibdc_usgwas_qc --keep get_from_GWAS3postQC.forplink.txt --keep-allele-order --make-bed --out GWAS3.postQC.TILI_ctrls
+
+#convert to vcf
+plink --allow-no-sex --bfile TIM_controls_BIRDSUITE.corrected --chr 1-22 --keep-allele-order --out TIM_controls_BIRDSUITE_autosomes --recode vcf-iid
+plink --allow-no-sex --bfile GWAS3.postQC.TILI_ctrls --chr 1-22 --keep-allele-order --out GWAS3.postQC.TILI_ctrls --recode vcf-iid
+#plink --allow-no-sex --bfile new_wave_qc3b.TILI_ctrls --chr 1-22 --keep-allele-order --out  new_wave_qc3b.TILI_ctrls --recode vcf-iid
+plink --allow-no-sex --bfile new_wave_qc1.TILI_ctrls  --chr 1-22 --keep-allele-order --out  new_wave_qc1.TILI_ctrls  --recode vcf-iid
+plink --allow-no-sex --bfile  GWAS3.preQC.TILI_ctrls  --chr 1-22 --keep-allele-order --out  GWAS3.preQC.TILI_ctrls  --recode vcf-iid
+plink --allow-no-sex --bfile  new_wave_201610.TILI_ctrls  --chr 1-22 --keep-allele-order --out  new_wave_201610.TILI_ctrls  --recode vcf-iid
+
+#flip alleles for new wave
+plink --allow-no-sex --vcf new_wave_qc1.TILI_ctrls.vcf --flip /lustre/scratch115/projects/ibdgwas/new_wave/aux_files/to_flip_based_on_strand.txt --out new_wave_qc1.TILI_ctrls.flipped --const-fid --recode vcf-iid
+#plink --allow-no-sex --vcf new_wave_qc3b.TILI_ctrls.vcf --flip /lustre/scratch115/projects/ibdgwas/new_wave/aux_files/to_flip_based_on_strand.txt --out new_wave_qc3b.TILI_ctrls.flipped --const-fid --recode vcf-iid
+plink --allow-no-sex --vcf new_wave_201610.TILI_ctrls.vcf --flip /lustre/scratch115/projects/ibdgwas/new_wave/aux_files/to_flip_based_on_strand.txt --out new_wave_201610.TILI_ctrls.flipped --const-fid --recode vcf-iid
+
+
+#update rsIDs
+plink --vcf GWAS3.preQC.TILI_ctrls.vcf --recode vcf-iid --update-name /lustre/scratch115/projects/crohns/exome/TIH/to_update_v5_allchr.txt --allow-no-sex --const-fid --out GWAS3.preQC.TILI_ctrls.updated_IDs
+plink --vcf GWAS3.postQC.TILI_ctrls.vcf --recode vcf-iid --update-name /lustre/scratch115/projects/crohns/exome/TIH/to_update_v5_allchr.txt --allow-no-sex --const-fid --out GWAS3.postQC.TILI_ctrls.updated_IDs
+plink --vcf new_wave_qc1.TILI_ctrls.flipped.vcf --recode vcf-iid --update-name /lustre/scratch115/projects/crohns/exome/TIH/aux_and_intermediate_files/to_update_allchr.nw.v2.txt --allow-no-sex --const-fid --out new_wave_qc1.TILI_ctrls.flipped.updated_IDs
+#plink --vcf new_wave_qc3b.TILI_ctrls.flipped.vcf --recode vcf-iid --update-name /lustre/scratch115/projects/crohns/exome/TIH/to_update_allchr.nw.v2.txt --allow-no-sex --const-fid --out new_wave_qc3b.TILI_ctrls.flipped.updated_IDs
+plink --vcf new_wave_201610.TILI_ctrls.flipped.vcf --recode vcf-iid --update-name /lustre/scratch115/projects/crohns/exome/TIH/aux_and_intermediate_files/to_update_allchr.nw.v2.txt --allow-no-sex --const-fid --out new_wave_201610.TILI_ctrls.flipped.updated_IDs
+
+#now rearrange alleles based on reference
+/software/team152/bcftools-1.4.1/bin/./bcftools +fixref GWAS3.preQC.TILI_ctrls.updated_IDs.vcf -Ov -o GWAS3.preQC.TILI_ctrls.updated_IDs.fixref.vcf -- -d -f /software/hgi/resources/ref/Homo_sapiens/1000Genomes_hs37d5/hs37d5.fa -i /lustre/scratch115/projects/ibdgwas/aux_files/All_20151104.vcf.gz &
+/software/team152/bcftools-1.4.1/bin/./bcftools +fixref GWAS3.postQC.TILI_ctrls.updated_IDs.vcf -Ov -o GWAS3.postQC.TILI_ctrls.updated_IDs.fixref.vcf -- -d -f /software/hgi/resources/ref/Homo_sapiens/1000Genomes_hs37d5/hs37d5.fa -i /lustre/scratch115/projects/ibdgwas/aux_files/All_20151104.vcf.gz &
+/software/team152/bcftools-1.4.1/bin/./bcftools +fixref new_wave_qc1.TILI_ctrls.flipped.updated_IDs.vcf -Ov -o new_wave_qc1.TILI_ctrls.flipped.updated_IDs.fixref.vcf -- -d -f /software/hgi/resources/ref/Homo_sapiens/1000Genomes_hs37d5/hs37d5.fa -i /lustre/scratch115/projects/ibdgwas/aux_files/All_20151104.vcf.gz &
+#/software/team152/bcftools-1.4.1/bin/./bcftools +fixref new_wave_qc3b.TILI_ctrls.flipped.updated_IDs.vcf -Ov -o new_wave_qc3b.TILI_ctrls.flipped.updated_IDs.fixref.vcf -- -d -f /software/hgi/resources/ref/Homo_sapiens/1000Genomes_hs37d5/hs37d5.fa -i /lustre/scratch115/projects/ibdgwas/aux_files/All_20151104.vcf.gz &
+/software/team152/bcftools-1.4.1/bin/./bcftools +fixref new_wave_201610.TILI_ctrls.flipped.updated_IDs.vcf -Ov -o new_wave_201610.TILI_ctrls.flipped.updated_IDs.fixref.vcf -- -d -f /software/hgi/resources/ref/Homo_sapiens/1000Genomes_hs37d5/hs37d5.fa -i /lustre/scratch115/projects/ibdgwas/aux_files/All_20151104.vcf.gz &
+/software/team152/bcftools-1.4.1/bin/./bcftools +fixref TIM_controls_BIRDSUITE_autosomes.vcf -Ov -o TIM_controls_BIRDSUITE_autosomes.fixref.vcf -- -d -f /software/hgi/resources/ref/Homo_sapiens/1000Genomes_hs37d5/hs37d5.fa -i /lustre/scratch115/projects/ibdgwas/aux_files/All_20151104.vcf.gz &
+
+#here
+
+#now re-order
+(bcftools view -h GWAS3.preQC.TILI_ctrls.updated_IDs.fixref.vcf; bcftools view -H GWAS3.preQC.TILI_ctrls.updated_IDs.fixref.vcf | sort -k1,1d -k2,2n;) | bcftools view -Ov -o GWAS3.preQC.TILI_ctrls.updated_IDs.fixref.srt.vcf
+(bcftools view -h GWAS3.postQC.TILI_ctrls.updated_IDs.fixref.vcf; bcftools view -H GWAS3.postQC.TILI_ctrls.updated_IDs.fixref.vcf | sort -k1,1d -k2,2n;) | bcftools view -Ov -o GWAS3.postQC.TILI_ctrls.updated_IDs.fixref.srt.vcf
+#(bcftools view -h new_wave_qc3b.TILI_ctrls.flipped.updated_IDs.fixref.vcf; bcftools view -H new_wave_qc3b.TILI_ctrls.flipped.updated_IDs.fixref.vcf | sort -k1,1d -k2,2n;) | bcftools view -Ov -o new_wave_qc3b.TILI_ctrls.updated_IDs.fixref.srt.vcf
+(bcftools view -h new_wave_qc1.TILI_ctrls.flipped.updated_IDs.fixref.vcf; bcftools view -H new_wave_qc1.TILI_ctrls.flipped.updated_IDs.fixref.vcf | sort -k1,1d -k2,2n;) | bcftools view -Ov -o new_wave_qc1.TILI_ctrls.updated_IDs.fixref.srt.vcf
+(bcftools view -h new_wave_201610.TILI_ctrls.flipped.updated_IDs.fixref.vcf; bcftools view -H new_wave_201610.TILI_ctrls.flipped.updated_IDs.fixref.vcf | sort -k1,1d -k2,2n;) | bcftools view -Ov -o new_wave_201610.TILI_ctrls.updated_IDs.fixref.srt.vcf
+(bcftools view -h TIM_controls_BIRDSUITE_autosomes.fixref.vcf; bcftools view -H TIM_controls_BIRDSUITE_autosomes.fixref.vcf | sort -k1,1d -k2,2n;) | bcftools view -Ov -o TIM_controls_BIRDSUITE_autosomes.fixref.srt.vcf
+
+#once this is done, extract the relevant variants (the ones also found in BIRDSUITE_autosomes file) 
+plink --allow-no-sex --vcf GWAS3.preQC.TILI_ctrls.updated_IDs.fixref.srt.vcf --extract snps_to_extract.txt  --keep-allele-order --out GWAS3.preQC.TILI_ctrls.updated_IDs.fixref.srt.filtered --recode vcf-iid --const-fid
+plink --allow-no-sex --vcf GWAS3.postQC.TILI_ctrls.updated_IDs.fixref.srt.vcf --extract snps_to_extract.txt  --keep-allele-order --out GWAS3.postQC.TILI_ctrls.updated_IDs.fixref.srt.filtered --recode vcf-iid --const-fid
+plink --allow-no-sex --vcf new_wave_qc1.TILI_ctrls.updated_IDs.fixref.srt.vcf --extract snps_to_extract.txt  --keep-allele-order --out new_wave_qc1.TILI_ctrls.updated_IDs.fixref.srt.filtered --recode vcf-iid --const-fid
+#plink --allow-no-sex --vcf new_wave_qc3b.TILI_ctrls.updated_IDs.fixref.srt.vcf --extract snps_to_extract.txt  --keep-allele-order --out new_wave_qc3b.TILI_ctrls.updated_IDs.fixref.srt.filtered --recode vcf-iid --const-fid
+plink --allow-no-sex --vcf new_wave_201610.TILI_ctrls.updated_IDs.fixref.srt.vcf --extract snps_to_extract.txt  --keep-allele-order --out new_wave_201610.TILI_ctrls.updated_IDs.fixref.srt.filtered --recode vcf-iid --const-fid
+
+#note that here we have ~10K variants less in the filtered GWAS3 and new_wave datasets (probably these will be rare etc, but I can use the raw files to get them back if needed)
+
+#now bgzip them before you input them in bcftools
+bgzip -f TIM_controls_BIRDSUITE_autosomes.fixref.srt.vcf
+bgzip -f GWAS3.preQC.TILI_ctrls.updated_IDs.fixref.srt.filtered.vcf
+bgzip -f GWAS3.postQC.TILI_ctrls.updated_IDs.fixref.srt.filtered.vcf
+bgzip -f new_wave_qc1.TILI_ctrls.updated_IDs.fixref.srt.filtered.vcf
+#bgzip -f new_wave_qc3b.TILI_ctrls.updated_IDs.fixref.srt.filtered.vcf
+bgzip -f new_wave_201610.TILI_ctrls.updated_IDs.fixref.srt.filtered.vcf
+
+#tabix them
+tabix TIM_controls_BIRDSUITE_autosomes.fixref.srt.vcf.gz
+tabix GWAS3.preQC.TILI_ctrls.updated_IDs.fixref.srt.filtered.vcf.gz
+tabix GWAS3.postQC.TILI_ctrls.updated_IDs.fixref.srt.filtered.vcf.gz
+tabix new_wave_qc1.TILI_ctrls.updated_IDs.fixref.srt.filtered.vcf.gz
+#tabix new_wave_qc3b.TILI_ctrls.updated_IDs.fixref.srt.filtered.vcf.gz
+tabix new_wave_201610.TILI_ctrls.updated_IDs.fixref.srt.filtered.vcf.gz
+
+#note that I accidentally kept urn:wtsi:435979_F04_ibdgwas6296228 in both the pre- and post-qc set
+#plink --vcf new_wave_qc1.TILI_ctrls.updated_IDs.fixref.srt.filtered.vcf.gz --remove dup_to_rem.txt --const-fid --recode vcf-iid --keep-allele-order --out ew_wave_qc1.TILI_ctrls.updated_IDs.fixref.srt.filtered2.vcf.gz
+
+#now we could start merging the panels (again using bcftools)
+#bcftools merge  new_wave_201610.TILI_ctrls.updated_IDs.fixref.srt.filtered.vcf.gz new_wave_qc1.TILI_ctrls.updated_IDs.fixref.srt.filtered.vcf.gz new_wave_qc3b.TILI_ctrls.updated_IDs.fixref.srt.filtered.vcf.gz TIM_controls_BIRDSUITE_autosomes.fixref.srt.vcf.gz GWAS3.preQC.TILI_ctrls.updated_IDs.fixref.srt.filtered.vcf.gz GWAS3.postQC.TILI_ctrls.updated_IDs.fixref.srt.filtered.vcf.gz -O v -o TILI_merged_ctrls.vcf --threads 3 --force-samples
+bcftools merge  new_wave_201610.TILI_ctrls.updated_IDs.fixref.srt.filtered.vcf.gz new_wave_qc1.TILI_ctrls.updated_IDs.fixref.srt.filtered.vcf.gz TIM_controls_BIRDSUITE_autosomes.fixref.srt.vcf.gz GWAS3.preQC.TILI_ctrls.updated_IDs.fixref.srt.filtered.vcf.gz GWAS3.postQC.TILI_ctrls.updated_IDs.fixref.srt.filtered.vcf.gz -O v -o TILI_merged_ctrls.vcf --threads 3 --force-samples
+bgzip -f TILI_merged_ctrls.vcf
+tabix TILI_merged_ctrls.vcf.gz
+#make a bfile set too: 
+plink --allow-no-sex --vcf TILI_merged_ctrls.vcf.gz --keep-allele-order --make-bed --double-id --out TILI_merged_all_ctrls
+
+# **now to remove the controls that are not for this study (we have 1025 and we should not have more than 614 at the end of this I think ) - I'm using R**
+
+fam=read.table("TILI_merged_all_ctrls.fam",stringsAsFactors=F) #all samples in our merged file
+carl=read.table("/lustre/scratch115/projects/crohns/exome/TIH/aux_and_intermediate_files/carl_controls_2017_07_19_GW_edited.csv",sep=",",stringsAsFactors=F,head=T) #the samples to keep in 
+data=read.table("/lustre/scratch115/projects/crohns/exome/TIH/aux_and_intermediate_files/exeter_sanger_patients_20161129.txt",sep="\t",head=T,stringsAsFactors=F) #the linking file
+original_fam=read.table("/lustre/scratch115/projects/crohns/exome/TIH/aux_and_intermediate_files/TIM_controls_BIRDSUITE.corrected.fam",stringsAsFactors=F)#this is the fam file we were given (to use column 1 which for some reason is not transferered properly)
+IDX=matrix(nrow=dim(carl)[1],ncol=6,0)
+colnames(IDX)=c("IBD_GEN_ID","IDX_in_NK_data","SANGER_ID","TOTAL_NO_SANGER_IDs","FAM_ID","FAM_ID_2")
+IDX[,1]=carl[,1]
+for(i in 1:dim(carl)[1]){
+idx=which(data$ibd_gen_id==carl[i,1])
+if(length(idx)>0){
+IDX[i,2]=idx[1]
+IDX[i,3]=data$sanger_id[idx[1]]
+IDX[i,4]=data$count_sanger_ids[idx[1]]
+}
+}
+
+
+for(i in 1:dim(IDX)[1]){
+if(IDX[i,2]!="0"){
+#first check the original fam file
+original_fam_idx=which(original_fam[,1]==IDX[i,1])
+if(length(original_fam_idx)>0){
+IDX[i,5]=original_fam[original_fam_idx,1]
+IDX[i,6]=original_fam[original_fam_idx,2]
+}else{
+fam_idx=which(grepl(IDX[i,3],fam[,2]))
+if(length(fam_idx)==0 && IDX[i,4]>1){
+new_idx=which(data$ibd_gen_id==IDX[i,1])
+IDX[i,2]=new_idx[2]
+IDX[i,3]=data$sanger_id[new_idx[2]]
+IDX[i,4]=data$count_sanger_ids[new_idx[2]]
+fam_idx=which(grepl(IDX[i,3],fam[,2]))
+}
+if(length(fam_idx)>0){
+IDX[i,5]=fam[fam_idx[1],2]
+IDX[i,6]=IDX[i,5]
+}
+}
+}}
+
+#at this stage, we should have 42 samples (as of July 26th, 2017) which are in the controls data sheet but NOT in our servers (26 are not in Nick's Sanger list, 11 are only typed on ichip, and 5 I couldn't find)
+# Now we should keep the remaining  - but remove the ones not in the data sheet - from the merged fam file.
+fam_tokeep=unique(c(which(fam[,2]%in%IDX[,5]),which(fam[,2]%in%IDX[,6])))
+list_of_samples_tokeep=fam[fam_tokeep,c(1:2)]
+write.table(list_of_samples_tokeep,"samples_to_keep_for_ctrls.txt",quote=F,col.names=F,row.names=F)
+#finally, update the fam file with the "proper" sample IDs for the study (I'm "using" the Family IDs too, keeping them as they are, to have both IDs in one file)
+fam_out=fam[fam_tokeep,]
+for(i in 1:dim(fam_out)[1]){
+idx=unique(c(which(IDX[,5]==fam_out[i,2]),which(IDX[,6]==fam_out[i,2])))
+fam_out[i,1]=IDX[idx[1],1]
+}
+write.table(fam_out,"TILI_merged_all_ctrls.updated_with_studyIDs.fam",quote=F,col.names=F,row.names=F)
+
+##now all that remains to do is to only keep the individuals in the "samples_to_keep_for_ctrls.txt" file, then update the fam file to the one above.
+plink --allow-no-sex --bfile /lustre/scratch115/projects/crohns/exome/TIH/TILI_merged_all_ctrls --keep samples_to_keep_for_ctrls.txt --keep-allele-order --make-bed --out TILI_final_ctrls
+
+#File to use in QC and downstream analyses: TILI_final_ctrls.bed
+
+##now for the cases, we only have to remove the samples from the file given to us which are not in the respective data sheet.
+plink --allow-no-sex --bfile /lustre/scratch115/projects/crohns/exome/TIH/Helmsley_Ahmad_TIM2-TIH_G4L_birdsuite --chr 1-22 --keep TILI_cases_to_keep.forplink.txt --keep-allele-order --make-bed --out TILI_final_cases
+
+#now we are ready to move on to QC, using files TILI_final_ctrls.bed and TILI_final_cases.bed.
+#get stats
+plink --bfile TILI_final_cases --missing --out TILI_final_cases
+plink --bfile TILI_final_ctrls --missing --out TILI_final_ctrls
+plink --bfile TILI_final_ctrls --hardy --out TILI_final_ctrls
+
+#prep lists to remove
+cat TILI_final_ctrls.hwe |awk '{if($9<1e-08){print $0}}'> snps_to_remove_ctrls_highhwe.txt
+cat TILI_final_cases.lmiss|awk '{if($5>0.1){print $0}}'> snps_to_remove_cases_highmiss.txt
+cat TILI_final_ctrls.lmiss|awk '{if($5>0.1){print $0}}'> snps_to_remove_ctrls_highmiss.txt
+cat snps_to_remove_ctrls_highmiss.txt snps_to_remove_ctrls_highhwe.txt | awk '{print $2}' > snps_to_remove_ctrls_qc1.txt
+cat snps_to_remove_cases_highmiss.txt | awk '{print $2}' > snps_to_remove_cases_qc1.txt
+
+plink --bfile TILI_final_cases --exclude snps_to_remove_cases_qc1.txt --out TILI_final_cases.qc1 --make-bed
+plink --bfile TILI_final_ctrls --exclude snps_to_remove_ctrls_qc1.txt --out TILI_final_ctrls.qc1 --make-bed
+
+
+***************************************************************************************************************************************************************
+*** #addition Sept06: Check for differential missingness and for association between sanger and broad ctrls, to remove some additional SNPs
+***************************************************************************************************************************************************************
+
+
+cp TILI_final_ctrls.qc1.fam TILI_final_ctrls.qc1b.forQC.fam 
+cp TILI_final_ctrls.qc1.bim TILI_final_ctrls.qc1b.forQC.bim
+cp TILI_final_ctrls.qc1.bed TILI_final_ctrls.qc1b.forQC.bed
+# The reason for the copy above is that I then change the .forQC.fam file in R, so that sanger controls (found in sanger_ctrls_qc2.txt are assigned pheno 2 and all broad ctrls are assigned pheno 1)
+# Then I run association analysis in plink:
+plink --allow-no-sex --bfile  TILI_final_ctrls.qc1b.forQC --assoc --out TILI_broad_vs_sanger
+cat TILI_broad_vs_sanger.assoc|awk '{if($9<1e-05){print $2}}'> broad_sanger_ctrl_diff_snps.txt
+
+#Before merging the case and control files, I need to ensure they are aligned. To do so:
+#a) convert to vcf
+plink --allow-no-sex --bfile TILI_final_cases.qc1 --chr 1-22 --keep-allele-order --out TILI_final_cases.qc1_autosomes --recode vcf-iid
+#b) rearrange alleles based on reference:
+/software/team152/bcftools-1.4.1/bin/./bcftools +fixref TILI_final_cases.qc1_autosomes.vcf -Ov -o TILI_final_cases.qc1_autosomes.fixref.vcf -- -d -f /software/hgi/resources/ref/Homo_sapiens/1000Genomes_hs37d5/hs37d5.fa -i /lustre/scratch115/projects/ibdgwas/aux_files/All_20151104.vcf.gz &
+#c) re-order
+(bcftools view -h TILI_final_cases.qc1_autosomes.fixref.vcf; bcftools view -H TILI_final_cases.qc1_autosomes.fixref.vcf | sort -k1,1d -k2,2n;) | bcftools view -Ov -o TILI_final_cases.qc1_autosomes.fixref.srt.vcf
+
+#d) bgzip and tabix it
+bgzip -f TILI_final_cases.qc1_autosomes.fixref.srt.vcf
+tabix -f TILI_final_cases.qc1_autosomes.fixref.srt.vcf.gz
+#e)finally get it back to plink format
+plink --allow-no-sex --vcf TILI_final_cases.qc1_autosomes.fixref.srt.vcf.gz --keep-allele-order --make-bed --double-id --out TILI_final_cases.qc1
+
+#before I merge, i also need to assign case-ctrl status
+cat TILI_final_ctrls.qc1.fam|awk '{print $1,$2,$3,$4,$5,"1"}'> TILI_tmp
+mv TILI_tmp TILI_final_ctrls.qc1.fam
+cat TILI_final_cases.qc1.fam|awk '{print $1,$2,$3,$4,$5,"2"}'> TILI_tmp
+mv TILI_tmp TILI_final_cases.qc1.fam
+
+#Before continuing, ensure we only keep variants present in cases AND ctrls.
+plink --bfile TILI_final_cases.qc1 --freq --out TILI_final_cases.qc1b --extract variants_in_ctrls.txt
+plink --bfile TILI_final_ctrls.qc1 --freq --out TILI_final_ctrls.qc1b --extract variants_in_cases.txt
+cat TILI_final_cases.qc1b.frq|awk '{if($5>0){print $2}}'|sort > variants_in_ctrls.qc1b.sorted
+cat TILI_final_ctrls.qc1b.frq|awk '{if($5>0){print $2}}'|sort > variants_in_cases.qc1b.sorted
+comm -12 variants_in_ctrls.qc1b.sorted variants_in_cases.qc1.sorted > variants_in_both.qc1b.sorted
+
+
+#now merge and remove the SNPs with differential missingness between cases and controls
+plink --allow-no-sex --bfile TILI_final_ctrls.qc1 --bmerge  TILI_final_cases.qc1 --extract variants_in_both.sorted  --make-bed --out TILI_merged.qc1b
+##check for differential missingness between cases and controls (just in case)
+plink --allow-no-sex --bfile  TILI_merged.qc1b --test-missing midp  --out TILI_merged.qc1b.forQC
+cat TILI_merged.qc1b.forQC.missing |awk '{if($5<1e-05){print $2}}'> differentially_missing_snps_between_cases_n_ctrls.txt
+cat differentially_missing_snps_between_cases_n_ctrls.txt broad_sanger_ctrl_diff_snps.txt > snps_to_remove_qc1b.txt
+plink --allow-no-sex --bfile TILI_merged.qc1b  --exclude snps_to_remove_qc1b.txt --make-bed --out TILI_merged.qc1c
+#now also prepare separate filtered files for cases and controls
+plink --allow-no-sex --bfile TILI_final_cases.qc1  --exclude snps_to_remove_qc1b.txt --make-bed --out TILI_final_cases.qc1c.tmp
+plink --allow-no-sex --bfile TILI_final_cases.qc1c.tmp  --extract variants_in_both.sorted --make-bed --out TILI_final_cases.qc1c
+
+plink --allow-no-sex --bfile TILI_final_ctrls.qc1  --exclude snps_to_remove_qc1b.txt --make-bed --out TILI_final_ctrls.qc1c.tmp
+plink --allow-no-sex --bfile TILI_final_ctrls.qc1c.tmp  --extract variants_in_both.sorted --make-bed --out TILI_final_ctrls.qc1c
+
+##after this, the qc1c file has 213710 variants (for reference), 151 cases and 613 ctrls.
+
+
+
+#now have a first look at the sample missingness and heterozygosity
+plink --allow-no-sex --bfile TILI_final_ctrls.qc1c --het --out TILI_final_ctrls.qc1c
+plink --allow-no-sex --bfile TILI_final_cases.qc1c --het --out TILI_final_cases.qc1c
+
+#prepare imiss again now that some variants were removed.
+plink --bfile TILI_final_cases.qc1c --missing --out TILI_final_cases.qc1c
+plink --bfile TILI_final_ctrls.qc1c --missing --out TILI_final_ctrls.qc1c
+
+#now to make a list of the samples to remove due to missingness and heterozygosity, run 04-imiss-vs-het_for_sample_removal.R
+# now prepare updated version (qc1d):
+plink --bfile TILI_final_cases.qc1c --remove cases_to_remove.qc1c.txt --out TILI_final_cases.qc1d --make-bed
+plink --bfile TILI_final_ctrls.qc1c --remove ctrls_to_remove.qc1c.txt --out TILI_final_ctrls.qc1d --make-bed
+cat cases_to_remove.qc1c.txt ctrls_to_remove.qc1c.txt > cases_and_ctrls_to_remove.qc1c.txt
+plink --bfile TILI_merged.qc1c --remove ctrls_to_remove.qc1c.txt --out TILI_merged.qc1d --make-bed
+
+#prepare imiss again now that some variants were removed.
+plink --bfile TILI_final_cases.qc1d --missing --out TILI_final_cases.qc1d
+plink --bfile TILI_final_ctrls.qc1d --missing --out TILI_final_ctrls.qc1d
+#and sample missingness 
+plink --bfile TILI_final_ctrls.qc1d --het --out TILI_final_ctrls.qc1d
+plink --bfile TILI_final_cases.qc1d --het --out TILI_final_cases.qc1d
+
+#another check I want to do is to make sure that the frequencies in ctrls are not too different by platform (sanger vs broad) 
+# this should also help with potential snps with different strands in the two platforms that got away.
+#For this run compare_sanger_and_broad_freqs.R
+
+#then remove these additional snps ***Note Sept 2017 - the following step is superfluous after doing the ctrl-ctrl association test
+#plink --bfile TILI_final_ctrls.qc1d --exclude snps_to_remove_because_of_diff_frq_in_sanger_vs_broad.txt.forplink --out TILI_final_ctrls.qc1dtmp --make-bed
+#plink --bfile TILI_final_cases.qc1d --exclude snps_to_remove_because_of_diff_frq_in_sanger_vs_broad.txt.forplink --out TILI_final_cases.qc1dtmp --make-bed
+
+
+
+##now get pruned subset of variants for controls, to use for IBS and PCA.
+plink --bfile TILI_merged.qc1d --exclude /lustre/scratch115/projects/crohns/exome/TIH/aux_and_intermediate_files/high_ld.txt --indep-pairwise 1000 50 0.2 --out TILI_set_for_IBS_qc1d
+##then get IBS estimates
+plink --allow-no-sex --bfile TILI_merged.qc1d  --exclude TILI_set_for_IBS_qc1d.prune.out --genome --out TILI_merged.qc1d.forIBS
+
+
+##based on these, remove samples with high pairwise ibs ** for now just from the merged dataset. Then make a list of the ones to remove due to being PCA outliers, and THEN remove them
+#from the respective datasets.
+plink --allow-no-sex --bfile TILI_merged.qc1d --exclude TILI_set_for_IBS.prune.out  --remove high_ibs_TILI_qc3.samples.toremove.txt --recode --make-bed --out TILI_merged.qc1d.pruned.filtered
+
+##now calculate PCs using the pruned merged dataset we just created.
+
+#note that because of a limit with the number of characters for sample_IDs and variants, I removed the 'urn:wtsi' from the sample IDs from the TILI_merged.qc3.pruned.pedind,TILI_merged.qc3.pruned.ped files
+
+smartpca.perl -i /lustre/scratch115/projects/crohns/exome/TIH/TILI_merged.qc1d.pruned.filtered.ped -a /lustre/scratch115/projects/crohns/exome/TIH/TILI_merged.qc1d.pruned.filtered.map -k 10 -m 0 -o /lustre/scratch115/projects/crohns/exome/TIH/TILI_merged.qc1d.pruned.filtered.pca -p /lustre/scratch115/projects/crohns/exome/TIH/TILI_merged.qc1d.pruned.filtered.plot -e /lustre/scratch115/projects/crohns/exome/TIH/TILI_merged.qc1d.pruned.filtered.eval -l /lustre/scratch115/projects/crohns/exome/TIH/TILI_merged.qc1d.pruned.filtered.log -b /lustre/scratch115/projects/crohns/exome/TIH/TILI_merged.qc1d.pruned.filtered.pedind -snpweightoutname TILI_merged.qc1d.pca_loadings 
+##note that the above perl script will produce a .par file which will be then loaded into smartpca. To get the snp loadings, I had to manually change the .par file by
+## adding the line 
+## snpweightoutname: /lustre/scratch115/projects/crohns/exome/TIH/merged_tili.qc1d.loadings
+then I ran:
+smartpca -p TILI_merged.qc1d.pruned.pca.par > TILI_merged.qc1d.pruned.pca.Sout
+
+## PCAs reveal what seems to be some ancestry-related stratification. To have a better look, I'll run together with 1KG PCs. Firstly I'll extract the pruned SNPs I'm using from 1KG.
+## 
+sh get_1KG_pc.sh
+#merge into one file
+plink --bfile 1KG.chr1.forPCA --merge-list 1KG.list --make-bed --out 1KG_for_PCA_allchr
+plink --bfile TILI_merged.qc1d.pruned.filtered --exclude removebeforeadding1KG.txt --make-bed --out TILI_mergedd
+plink --allow-no-sex --bfile TILI_mergedd --bmerge 1KG_for_PCA_allchr --make-bed --exclude removebeforeadding1KG.txt --out TILI_1KG_forPCAtmp
+
+#now keep only the ones that are present in that 1KG release
+cat 1KG_for_PCA_allchr.bim|awk '{print $2}'> snps_present_in_both.txt
+plink --allow-no-sex --bfile TILI_1KG_forPCAtmp --extract snps_to_keep_for_joint_PCA.txt --out TILI_1KG_forPCA --make-bed 
+#now rerun PCs - **REMEMBER** that smartpca misbehaves (ignores samples) when they have no case/ctrl status assigned, so do this for 1KG prior to running
+sed -i 's/-9/1/g' TILI_1KG_forPCA.fam
+plink --allow-no-sex --bfile TILI_1KG_forPCA --recode --out TILI_1KG_forPCA
+cat   TILI_1KG_forPCA.ped |awk '{print $1,$2,$3,$4,$5,$6}' > TILI_1KG_forPCA.pedind
+sed -i 's/urn:wtsi//g' TILI_1KG_forPCA.ped*
+smartpca -p TILI_1KG_qc1d.par > TILI_1KG_qc1d.Sout
+
+*********************************************************************************************
+* the following I did not repeat  on the september 6th re-organised run
+
+# dokimazw kai allo tool gia PC computation, to prcomp
+# transform the plink file into a 0/1/2
+plink --file TILI_merged.qc3.pruned.corrected --recode12 --out TILI_merged.qc3.pruned.corrected.recoded
+
+#vgazei episis "paraksena" apotelesmata, opote dokimazw kai EIGENSTRAT me sample filtering
+cp TILI_merged.qc3.pruned.pca.par TILI_merged.qc3.pruned.pca.with_eignestrat_removing_outliers.par
+#kai meta sto kainourgio par file allaksa to numoutlieriter: 0 se numoutlieriter: 10 (kai ta output files wste na periexoun "outrem")
+smartpca -p TILI_merged.qc3.pruned.pca.with_eignestrat_removing_outliers.par > TILI_merged.qc3.pruned.pca.with_eignestrat_removing_outliers.par.Sout
+smartpca -p TILI_merged.qc3.pruned.pca.with_eignestrat_removing_outliers.30.6.5.par > TILI_merged.qc3.pruned.pca.with_eignestrat_removing_outliers.par.30.6.5.Sout
+*********************************************************************************************
+
+
+#After chatting with Carl, we decided to remove based on visual inspection together with 1KG. Removal lists are in files ctrls_to_remove_due_to_PCA.txt,cases_to_remove_due_to_PCA.txt
+# These should be removed from the merged file, and the remaining list is the list that should be used for the analysis. So, for cases and controls, the samples to be removed are:
+# high_ibs_TILI_qc3.samples.toremove.txt,ctrls_to_remove_due_to_PCA.txt,cases_to_remove_due_to_PCA.txt, cases_to_remove.txt, ctrls_to_remove.txt
+#The files to use are TILI_final_ctrls.qc3, TILI_final_cases.qc3
+cat cases_to_remove.qc1c.txt cases_to_remove_due_to_PCA_qc1d.txt high_ibs_TILI_qc3.samples.toremove.txt > cases_to_remove_qc1d.txt
+cat ctrls_to_remove.qc1c.txt ctrls_to_remove_due_to_PCA_qc1d.txt high_ibs_TILI_qc3.samples.toremove.txt > ctrls_to_remove_qc1d.txt
+
+plink --allow-no-sex --bfile TILI_final_cases.qc1d  --remove cases_to_remove_qc1d.txt --make-bed --out TILI_final_cases.qc1e
+plink --allow-no-sex --bfile TILI_final_ctrls.qc1d  --remove ctrls_to_remove_qc1d.txt --make-bed --out TILI_final_ctrls.qc1e
+
+#now merge again, for the association analysis
+plink --bfile TILI_final_ctrls.qc1e --bmerge  TILI_final_cases.qc1e --out TILI_merged.qc1e
+
+#now get the PCs from this dataset to use as covariates
+plink --bfile TILI_merged.qc1e --exclude /lustre/scratch115/projects/crohns/exome/TIH/aux_and_intermediate_files/high_ld.txt --indep-pairwise 1000 50 0.2 --out TILI_merged.qc1e.pruned
+plink --allow-no-sex --bfile TILI_merged.qc1e --extract TILI_merged.qc1e.pruned.prune.in --make-bed --out TILI_merged.qc1e.pruned
+plink --bfile TILI_merged.qc1e.pruned --recode --out TILI_merged.qc1e.pruned
+sed -i 's/urn:wtsi://g' TILI_merged.qc1e.pruned.ped*
+smartpca -p TILI_merged.qc1e.pca.par > TILI_merged.qc1e.pca.Sout
+
+#Trexw kai to SNPTEST2, me 4 PCs gia covariates afti ti fora, na dw pws meiwnetai to lambda. Just 4 PCs are significant and will be included in the analysis.
+plink --bfile TILI_merged.qc1e --recode oxford --out TILI_merged.qc1e
+snptest -data  TILI_merged.qc1e.gen TILI_merged.qc1e.samplee -o output/TILI_merged.qc1e.snptest_output.txt -frequentist 1  -cov_names pc1 pc2 pc3 pc4 -pheno phenotype -method score 
+
+##rerun snptest2 mono gia hepatocellular TILI
+snptest -data  TILI_merged.qc1e.gen TILI_merged.qc1e.samplee -exclude_samples aux_and_intermediate_files/non_hepatocellular_cases.txt -o output/TILI_merged.qc1e.hepatocellular.snptest_output.txt -frequentist 1  -cov_names pc1 pc2 pc3 pc4 -pheno phenotype -method score 
+##rerun snptest2 with only definite TILI (just 17 individuals)
+snptest -data  TILI_merged.qc1e.gen TILI_merged.qc1e.samplee -exclude_samples aux_and_intermediate_files/probable_cases.txt -o output/TILI_merged.qc1e.definite.snptest_output.txt -frequentist 1  -cov_names pc1 pc2 pc3 pc4 -pheno phenotype -method score 
+
+
+#####################################################
+#trying GEMMA for association testing with univariate LMMs
+/software/team152/./gemma.linux -bfile TILI_merged.qc4 -gk 2 -o TILI_merged.qc4
+/software/team152/./gemma.linux -bfile TILI_merged.qc4.forgemma -d output/TILI_merged.qc4.gemma_output.eigenD.txt -u output/TILI_merged.qc4.gemma_output.eigenU.txt  -hwe 0.00000001 -maf 0.001 -lmm 2 -o TILI_merged.qc4.gemma_output
+
+#vgazw perierga apotelesmata (mono spurious associations). Dokimazw kai to SNPTEST2
+plink --bfile TILI_merged.qc4 --recode oxford --out TILI_merged.qc4
+#note that atm I haven't added any PCs as covariates (or other covs)
+snptest -data  TILI_merged.qc4.gen TILI_merged.qc4.sample -o output/TILI_merged.qc4.snptest_output.txt -frequentist 1  -pheno phenotype -method score 
+
+
+
+##rerun snptest2 without the 5-6 special cases that were tolerant to 6MP
+snptest -data  TILI_merged.qc4_v2.gen TILI_merged.qc4_v2.samplee -exclude_samples tili_special_cases.txt -o output/TILI_merged.qc4_v2.nospecial.snptest_output.txt -frequentist 1  -cov_all_continuous -pheno phenotype -method score 
+
+##rerun snptest2 with only definite TILI (just 17 individuals)
+snptest -data  TILI_merged.qc4_v2.gen TILI_merged.qc4_v2.samplee -exclude_samples aux_and_intermediate_files/probable_cases.txt -o output/TILI_merged.qc4_v2.definite.snptest_output.txt -frequentist 1  -cov_all_continuous -pheno phenotype -method score 
+
+
+

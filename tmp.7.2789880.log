@@ -1,0 +1,243 @@
+ and 
+Condition on :     
+Welcome to SNPTEST v2.5
+© University of Oxford 2008-2013
+https://mathgen.stats.ox.ac.uk/genetics_software/snptest/snptest.html
+Read LICENCE file for conditions of use.
+
+==============
+
+Data Files : 
+ -gen files : /lustre/scratch113/projects/crohns/RELEASE/v2/IBDseq/7.gen.gz 
+ -sample files : /lustre/scratch113/projects/crohns/RELEASE/v1/IBDseq/IBDseq.sample 
+
+Tests : 
+ -frequentist : 1
+ -method score -cov_all_continuous : conditioning on all continuous covariates
+
+
+reading sample exclusion lists
+ -/lustre/scratch113/projects/crohns/2013Aug07/assoc/beagle-v2/fail-qc-inds.txt [255 sample IDs read in]
+
+reading snps exclusion list 
+ -/lustre/scratch113/teams/anderson/users/jga/001_Projects/Project2_FineMappingSeqData/SNPsPassFilters/7.IBD.snps.NoPassFilters.OnlyIDs.txt[7267322 snp ID's read in]
+
+Inspecting data (this may take some time)...
+!! Error (genfile::KeyNotFoundError): could not condition on SNP "rsid~" because it was not found in the source "chain:/lustre/scratch113/projects/crohns/RELEASE/v2/IBDseq/7.gen.gz".
+Welcome to SNPTEST v2.5
+© University of Oxford 2008-2013
+https://mathgen.stats.ox.ac.uk/genetics_software/snptest/snptest.html
+Read LICENCE file for conditions of use.
+
+==============
+
+Data Files : 
+ -gen files : /lustre/scratch113/projects/crohns/RELEASE/v2/IBDseq/7.gen.gz 
+ -sample files : /lustre/scratch113/projects/crohns/RELEASE/v1/IBDseq/IBDseq.sample 
+
+Tests : 
+ -frequentist : 1
+ -method score -cov_all_continuous : conditioning on all continuous covariates
+
+
+reading sample exclusion lists
+ -/lustre/scratch113/projects/crohns/2013Aug07/assoc/beagle-v2/fail-qc-inds.txt [255 sample IDs read in]
+
+reading snps exclusion list 
+ -/lustre/scratch113/teams/anderson/users/jga/001_Projects/Project2_FineMappingSeqData/SNPsPassFilters/7.IBD.snps.NoPassFilters.OnlyIDs.txt[7267322 snp ID's read in]
+
+Inspecting data (this may take some time)...
+Filtering SNPs based on filter:
+- NOT( SNPID or RSID in { set of 7267304 } ) AND position in 2789875-2789885
+
+Sample and exclusions summary :
+ - Number of individuals in : (cohort 1) 
+       ...before exclusions : 8097       
+        ...after exclusions : 8097       
+
+Reading sample files :
+Summary of covariates and phenotypes
+ # discrete variables : 0
+ # continuous variables : 10
+  cov1 : type = C (Continuous covariate)
+  cov2 : type = C (Continuous covariate)
+  cov3 : type = C (Continuous covariate)
+  cov4 : type = C (Continuous covariate)
+  cov5 : type = C (Continuous covariate)
+  cov6 : type = C (Continuous covariate)
+  cov7 : type = C (Continuous covariate)
+  cov8 : type = C (Continuous covariate)
+  cov9 : type = C (Continuous covariate)
+  cov10 : type = C (Continuous covariate)
+ # phenotypes : 1
+  bin1 : type = B (Binary phenotype)
+Covariate summary :
+  cov1    :                 missing  min      max      mean     variance
+            (unnormalised): 0        -0.2859  0.0127   -0.0000  0.0001  
+              (normalised): 0        -25.7253 1.1390   0.0000   1.0000  
+               (histogram): 
+                              6561-|                             * 
+                                   |                             * 
+                                   |                             * 
+                                   |                             * 
+                              3474-|                             * 
+                                   |                             * 
+                                   |                             * 
+                                   |                             * 
+                               386-|                            ** 
+                                   +-------------------------------
+                                    -26.16                     1.58
+  cov2    :                 missing  min      max      mean     variance
+            (unnormalised): 0        -0.0369  0.9203   -0.0000  0.0001  
+              (normalised): 0        -3.3166  82.8062  0.0000   1.0000  
+               (histogram): 
+                              7509-| *                             
+                                   | *                             
+                                   | *                             
+                                   | *                             
+                              3976-| *                             
+                                   | *                             
+                                   | *                             
+                                   | *                             
+                               442-| *                             
+                                   +-------------------------------
+                                    -4.71                     84.22
+  cov3    :                 missing  min      max      mean     variance
+            (unnormalised): 0        -0.2039  0.0538   0.0000   0.0001  
+              (normalised): 0        -18.3447 4.8436   0.0000   1.0000  
+               (histogram): 
+                              3915-|                       *       
+                                   |                       *       
+                                   |                       *       
+                                   |                       *       
+                              2072-|                       *       
+                                   |                       *       
+                                   |                       **      
+                                   |                       ****    
+                               230-|                      *****    
+                                   +-------------------------------
+                                    -18.72                     5.22
+  cov4    :                 missing  min      max      mean     variance
+            (unnormalised): 0        -0.0497  0.6905   -0.0000  0.0001  
+              (normalised): 0        -4.4690  62.1310  -0.0000  1.0000  
+               (histogram): 
+                              7535-|  *                            
+                                   |  *                            
+                                   |  *                            
+                                   |  *                            
+                              3989-|  *                            
+                                   |  *                            
+                                   |  *                            
+                                   |  *                            
+                               443-|  *                            
+                                   +-------------------------------
+                                    -5.54                     63.22
+  cov5    :                 missing  min      max      mean     variance
+            (unnormalised): 0        -0.3314  0.0403   0.0000   0.0001  
+              (normalised): 0        -29.8180 3.6287   0.0000   1.0000  
+               (histogram): 
+                              3186-|                           *   
+                                   |                           *   
+                                   |                           *   
+                                   |                           **  
+                              1686-|                          ***  
+                                   |                          ***  
+                                   |                          ***  
+                                   |                         ****  
+                               187-|                         ****  
+                                   +-------------------------------
+                                    -30.36                     4.18
+  cov6    :                 missing  min      max      mean     variance
+            (unnormalised): 0        -0.8449  0.0503   0.0000   0.0001  
+              (normalised): 0        -76.0207 4.5245   0.0000   1.0000  
+               (histogram): 
+                              6194-|                            *  
+                                   |                            *  
+                                   |                            *  
+                                   |                            *  
+                              3279-|                            *  
+                                   |                            *  
+                                   |                            *  
+                                   |                            ** 
+                               364-|                            ** 
+                                   +-------------------------------
+                                    -77.32                     5.84
+  cov7    :                 missing  min      max      mean     variance
+            (unnormalised): 0        -0.8860  0.3467   0.0000   0.0001  
+              (normalised): 0        -79.7175 31.1992  0.0000   1.0000  
+               (histogram): 
+                              6057-|                      *        
+                                   |                      *        
+                                   |                      *        
+                                   |                      *        
+                              3206-|                      *        
+                                   |                      *        
+                                   |                      *        
+                                   |                     **        
+                               356-|                     **        
+                                   +-------------------------------
+                                    -81.51                    33.02
+  cov8    :                 missing  min      max      mean     variance
+            (unnormalised): 0        -0.9199  0.0748   0.0000   0.0001  
+              (normalised): 0        -82.7721 6.7294   -0.0000  1.0000  
+               (histogram): 
+                              7574-|                            *  
+                                   |                            *  
+                                   |                            *  
+                                   |                            *  
+                              4010-|                            *  
+                                   |                            *  
+                                   |                            *  
+                                   |                            *  
+                               446-|                            *  
+                                   +-------------------------------
+                                    -84.22                     8.20
+  cov9    :                 missing  min      max      mean     variance
+            (unnormalised): 0        -0.8405  0.2573   0.0000   0.0001  
+              (normalised): 0        -75.6271 23.1539  -0.0000  1.0000  
+               (histogram): 
+                              7600-|                       *       
+                                   |                       *       
+                                   |                       *       
+                                   |                       *       
+                              4024-|                       *       
+                                   |                       *       
+                                   |                       *       
+                                   |                       *       
+                               447-|                       *       
+                                   +-------------------------------
+                                    -77.22                    24.77
+  cov10   :                 missing  min      max      mean     variance
+            (unnormalised): 0        -0.8973  0.2421   0.0000   0.0001  
+              (normalised): 0        -80.7399 21.7842  -0.0000  1.0000  
+               (histogram): 
+                              7512-|                        *      
+                                   |                        *      
+                                   |                        *      
+                                   |                        *      
+                              3977-|                        *      
+                                   |                        *      
+                                   |                        *      
+                                   |                        *      
+                               442-|                        *      
+                                   +-------------------------------
+                                    -82.39                    23.46
+Phenotype summary :
+  bin1    : missing  levels
+            0        0(3652) 1(4445)
+
+Phenotype being used : bin1
+
+Data Summaries : 
+ -number of SNPs = (unknown)
+
+Data with missing genotype data threshold and exclusion list applied :
+ /lustre/scratch113/projects/crohns/RELEASE/v2/IBDseq/7.gen.gz : 8097
+
+--------------------------------------------------------------------------
+
+SinglePhenotypeTest
+--------------------------------------------------------------------------
+
+Analyzing Data :
+ scanning...

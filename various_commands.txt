@@ -1,0 +1,167 @@
+plink --allow-no-sex --bfile ichip_b37 --exclude indels_to_remove.txt --chr 1-22 --keep uk_inclusion.list --keep-allele-order --out new_wave_qc3b_autosomes --recode vcf-iid
+plink --allow-no-sex --bfile ichip_b37 --exclude dups.toremove.list --chr 1-22 --keep uk_inclusion.list --keep-allele-order --out ichip_b37_autosomes --recode vcf-iid
+plink --vcf ichip_b37_autosomes.vcf --flip to_flip_based_on_strand.txt --out ichip_b37_autosomes_flipped_to_pos.strand.vcf --recode vcf-iid
+plink --allow-no-sex --vcf new_wave_qc3b_autosomes.vcf --flip aux_files/to_flip_based_on_strand.txt --chr 1-22 --out new_wave_qc3b_autosomes.flipped.vcf --const-fid --recode vcf-iid
+
+
+ 
+gwas1:
+plink --vcf wtccc1_hg19.aligned.clean.CD+CTRL.vcf --recode vcf-iid --update-name aux_files/to_update_allchr.txt --allow-no-sex --const-fid --out wtccc1_hg19.aligned.clean.updated_IDs
+/software/team152/bcftools-1.4.1/bin/./bcftools +fixref wtccc1_hg19.aligned.clean.updated_IDs.vcf  -Ov -o wtccc1_hg19.aligned.clean.updated_IDs.fixref.vcf -- -d -f /software/hgi/resources/ref/Homo_sapiens/1000Genomes_hs37d5/hs37d5.fa -i /lustre/scratch115/projects/ibdgwas/aux_files/All_20151104.vcf.gz
+(/software/team152/bcftools-1.4.1/bin/./bcftools view -h wtccc1_hg19.aligned.clean.updated_IDs.fixref.vcf; /software/team152/bcftools-1.4.1/bin/./bcftools view -H wtccc1_hg19.aligned.clean.updated_IDs.fixref.vcf | sort -k1,1d -k2,2n;) | /software/team152/bcftools-1.4.1/bin/./bcftools view -Ov -o wtccc1_hg19.aligned.clean.updated_IDs.fixref.srt.vcf
+###with the new version for bcftools which should keep sites triallelic in the reference(25May:)
+/software/team152/bcftools/bin/./bcftools +fixref wtccc1_hg19.aligned.clean.updated_IDs.vcf  -Ov -o wtccc1_hg19.aligned.clean.updated_IDs.fixref.M25.vcf -- -d -f /software/hgi/resources/ref/Homo_sapiens/1000Genomes_hs37d5/hs37d5.fa -i /lustre/scratch115/projects/ibdgwas/aux_files/All_20151104.vcf.gz
+(/software/team152/bcftools-1.4.1/bin/./bcftools view -h wtccc1_hg19.aligned.clean.updated_IDs.fixref.M25.vcf; /software/team152/bcftools-1.4.1/bin/./bcftools view -H wtccc1_hg19.aligned.clean.updated_IDs.fixref.M25.vcf | sort -k1,1d -k2,2n;) | /software/team152/bcftools-1.4.1/bin/./bcftools view -Ov -o wtccc1_hg19.aligned.clean.updated_IDs.fixref.M25.srt.vcf
+
+gwas2:
+plink --vcf wtccc2_hg19.vcf --recode vcf-iid --update-name aux_files/to_update_allchr.txt --allow-no-sex --const-fid --out wtccc2_hg19.updated_IDs
+/software/team152/bcftools-1.4.1/bin/./bcftools +fixref wtccc2_hg19.updated_IDs.vcf  -Ov -o wtccc2_hg19.updated_IDs.fixref.vcf -- -d -f /software/hgi/resources/ref/Homo_sapiens/1000Genomes_hs37d5/hs37d5.fa -i /lustre/scratch115/projects/ibdgwas/aux_files/All_20151104.vcf.gz
+###with the new version for bcftools which should keep sites triallelic in the reference(25May:)
+/software/team152/bcftools/bin/./bcftools +fixref wtccc2_hg19.updated_IDs.vcf  -Ov -o wtccc2_hg19.updated_IDs.fixref.M25.vcf -- -d -f /software/hgi/resources/ref/Homo_sapiens/1000Genomes_hs37d5/hs37d5.fa -i /lustre/scratch115/projects/ibdgwas/aux_files/All_20151104.vcf.gz
+(/software/team152/bcftools/bin/./bcftools view -h wtccc2_hg19.updated_IDs.fixref.M25.vcf; /software/team152/bcftools/bin/./bcftools view -H wtccc2_hg19.updated_IDs.fixref.M25.vcf | sort -k1,1d -k2,2n;) | /software/team152/bcftools/bin/./bcftools view -Ov -o wtccc2_hg19.updated_IDs.fixref.M25.srt.vcf
+
+gwas3:
+/software/team152/bcftools/bin/./bcftools +fixref coreex_gaibdc_usgwas_qc_autosomes.updated_IDs.vcf  -Ov -o coreex_gaibdc_usgwas_qc_autosomes.updated_IDs.fixref.M25.vcf -- -d -f /software/hgi/resources/ref/Homo_sapiens/1000Genomes_hs37d5/hs37d5.fa -i /lustre/scratch115/projects/ibdgwas/aux_files/All_20151104.vcf.gz
+(/software/team152/bcftools-1.4.1/bin/./bcftools view -h coreex_gaibdc_usgwas_qc_autosomes.updated_IDs.fixref.M25.vcf; /software/team152/bcftools-1.4.1/bin/./bcftools view -H coreex_gaibdc_usgwas_qc_autosomes.updated_IDs.fixref.M25.vcf | sort -k1,1d -k2,2n;) | /software/team152/bcftools-1.4.1/bin/./bcftools view -Ov -o coreex_gaibdc_usgwas_qc_autosomes.updated_IDs.fixref.M25.srt.vcf
+ 
+ 
+new wave:
+#I decided to first use Will's Ref/Alt file, and then update rsIDs and see if fixref can be of help.
+plink --a2-allele aux_files/humancoreexome-12v1-1_a-b37.strand.RefAlt --vcf new_wave_qc3b_autosomes.flipped.vcf --recode vcf-iid --const-fid --out new_wave_qc3b_autosomes.flipped.RefAlt 
+plink --vcf new_wave_qc3b_autosomes.flipped.RefAlt.vcf --recode vcf-iid --update-name aux_files/to_update_allchr.txt --allow-no-sex --const-fid --out new_wave_qc3b_autosomes.flipped.RefAlt.updated_IDs
+ /software/team152/bcftools-1.4.1/bin/./bcftools +fixref new_wave_qc3b_autosomes.flipped.RefAlt.updated_IDs.vcf  -Ov -o new_wave_qc3b_autosomes.flipped.RefAlt.updated_IDs.fixref.vcf -- -d -f /software/hgi/resources/ref/Homo_sapiens/1000Genomes_hs37d5/hs37d5.fa -i /lustre/scratch115/projects/ibdgwas/aux_files/All_20151104.vcf.gz
+#now run with set-ref:
+bcftools +set-ref new_wave_qc3b_autosomes.flipped.RefAlt.updated_IDs.vcf -- -vf /software/hgi/resources/ref/Homo_sapiens/1000Genomes_hs37d5/hs37d5.fa |bcftools view -Ov > new_wave_qc3b_autosomes.flipped.RefAlt.updated_IDs.setref.vcf
+#now check
+bcftools +fixref new_wave_qc3b_autosomes.flipped.RefAlt.updated_IDs.setref.vcf -- -f /software/hgi/resources/ref/Homo_sapiens/1000Genomes_hs37d5/hs37d5.fa
+bcftools +fixref new_wave_qc3b_autosomes.flipped.RefAlt.updated_IDs.fixref.vcf -- -f /software/hgi/resources/ref/Homo_sapiens/1000Genomes_hs37d5/hs37d5.fa
+#sort
+(/software/team152/bcftools-1.4.1/bin/./bcftools view -h new_wave_qc3b_autosomes.flipped.RefAlt.updated_IDs.fixref.vcf; /software/team152/bcftools-1.4.1/bin/./bcftools view -H new_wave_qc3b_autosomes.flipped.RefAlt.updated_IDs.fixref.vcf | sort -k1,1d -k2,2n;) | /software/team152/bcftools-1.4.1/bin/./bcftools view -Ov -o new_wave_qc3b_autosomes.flipped.RefAlt.updated_IDs.fixref.srt.vcf
+
+###with the new version for bcftools which should keep sites triallelic in the reference - but not triallelic in the genotyping chip(25May:)
+/software/team152/bcftools/bin/./bcftools +fixref new_wave_qc3b_autosomes.flipped.RefAlt.updated_IDs.vcf  -Ov -o new_wave_qc3b_autosomes.flipped.RefAlt.updated_IDs.M25.fixref.vcf -- -d -f /software/hgi/resources/ref/Homo_sapiens/1000Genomes_hs37d5/hs37d5.fa -i /lustre/scratch115/projects/ibdgwas/aux_files/All_20151104.vcf.gz
+(/software/team152/bcftools-1.4.1/bin/./bcftools view -h new_wave_qc3b_autosomes.flipped.RefAlt.updated_IDs.M25.fixref.vcf; /software/team152/bcftools-1.4.1/bin/./bcftools view -H new_wave_qc3b_autosomes.flipped.RefAlt.updated_IDs.M25.fixref.vcf | sort -k1,1d -k2,2n;) | /software/team152/bcftools-1.4.1/bin/./bcftools view -Ov -o new_wave_qc3b_autosomes.flipped.RefAlt.updated_IDs.fixref.M25.srt.vcf
+
+ 
+ ichip:
+ #first I check whether strand has been flipped and if not I do so. Then I update rsIDs and then I give it to fixref.
+ plink --vcf ichip_b37_autosomes_flipped_to_pos.strand.vcf --recode vcf-iid --update-name aux_files/to_update_allchr.txt --allow-no-sex --const-fid --out ichip_b37_autosomes_flipped_to_pos.strand.vcf.updated_IDs
+ /software/team152/bcftools-1.4.1/bin/./bcftools +fixref ichip_b37_autosomes_flipped_to_pos.strand.updated_IDs.vcf  -Ov -o ichip_b37_autosomes_flipped_to_pos.strand.updated_IDs.fixref.vcf -- -d -f /software/hgi/resources/ref/Homo_sapiens/1000Genomes_hs37d5/hs37d5.fa -i /lustre/scratch115/projects/ibdgwas/aux_files/All_20151104.vcf.gz
+#now run with set-ref:
+bcftools +set-ref ichip_b37_autosomes_flipped_to_pos.strand.updated_IDs.vcf -- -vf /software/hgi/resources/ref/Homo_sapiens/1000Genomes_hs37d5/hs37d5.fa |bcftools view -Ov > ichip_b37_autosomes_flipped_to_pos.strand.updated_IDs.vcf
+ 
+ bcftools +fixref new_wave_qc3b_autosomes.vcf -- -f /software/hgi/resources/ref/Homo_sapiens/1000Genomes_hs37d5/hs37d5.fa
+ bcftools +fixref /lustre/scratch115/projects/ibdgwas/Homo_sapiens.GRCh37.dna.all.fa
+ 
+(/software/team152/bcftools-1.4.1/bin/./bcftools view -h ichip_b37_autosomes_flipped_to_pos.strand.updated_IDs.fixref.vcf; /software/team152/bcftools-1.4.1/bin/./bcftools view -H ichip_b37_autosomes_flipped_to_pos.strand.updated_IDs.fixref.vcf | sort -k1,1d -k2,2n;) | /software/team152/bcftools-1.4.1/bin/./bcftools view -Ov -o ichip_b37_autosomes_flipped_to_pos.strand.updated_IDs.fixref.srt.vcf
+  
+ 
+###with the new version for bcftools which should keep sites triallelic in the reference - but not triallelic in the genotyping chip(25May:)
+/software/team152/bcftools/bin/./bcftools +fixref ichip_b37_autosomes_flipped_to_pos.strand.updated_IDs.vcf  -Ov -o ichip_b37_autosomes_flipped_to_pos.strand.updated_IDs.M25.fixref.vcf -- -d -f /software/hgi/resources/ref/Homo_sapiens/1000Genomes_hs37d5/hs37d5.fa -i /lustre/scratch115/projects/ibdgwas/aux_files/All_20151104.vcf.gz
+(/software/team152/bcftools-1.4.1/bin/./bcftools view -h ichip_b37_autosomes_flipped_to_pos.strand.updated_IDs.M25.fixref.vcf; /software/team152/bcftools-1.4.1/bin/./bcftools view -H ichip_b37_autosomes_flipped_to_pos.strand.updated_IDs.M25.fixref.vcf | sort -k1,1d -k2,2n;) | /software/team152/bcftools-1.4.1/bin/./bcftools view -Ov -o ichip_b37_autosomes_flipped_to_pos.strand.updated_IDs.M25.fixref.srt.vcf
+
+ 
+ 
+ data=read.table("HIRD_Sample_Inventory_2017.txt",head=T,sep="\t")
+ tmp=as.character(unique(data[,1]))
+ eligible_patients=NULL
+ patients_with_potential_microarray_data=NULL
+ for(patient in 1:length(tmp)){
+ idx=which(as.character(data[,1])==tmp[patient])
+ if("2"%in%as.character(data[idx,2]) & "3"%in%as.character(data[idx,2])){
+ tmp_idx1=which(as.character(data[idx,8])=="2")
+ tmp_idx2=which(as.character(data[idx,8])=="3")
+if(as.character(data[idx[tmp_idx1],19])=="1" && as.character(data[idx[tmp_idx2],19])=="1" ){
+eligible_patients=c(eligible_patients,tmp[patient])
+} 
+ }
+ }
+ 
+ 
+  tmp=as.character(unique(data[,1]))
+ patients_with_potential_microarray_data=NULL
+ for(patient in 1:length(tmp)){
+ idx=which(as.character(data[,1])==tmp[patient])
+ if("1"%in%as.character(data[idx,2]) & "2"%in%as.character(data[idx,2]) & "3"%in%as.character(data[idx,2]) & "4"%in%as.character(data[idx,2])){
+ tmp_idx1=which(as.character(data[idx,8])=="1")
+ tmp_idx2=which(as.character(data[idx,8])=="2")
+ tmp_idx3=which(as.character(data[idx,8])=="3")
+ tmp_idx4=which(as.character(data[idx,8])=="4")
+if(as.character(data[idx[tmp_idx1],19])=="0" && as.character(data[idx[tmp_idx2],19])=="0" && as.character(data[idx[tmp_idx3],19])=="0" && as.character(data[idx[tmp_idx4],19])=="0"){
+patients_with_potential_microarray_data=c(patients_with_potential_microarray_data,tmp[patient])
+} 
+ }
+ }
+ 
+idx_eli=which(as.character(data[,1])%in%eligible_patients)
+write.table(data[idx_eli,],"potentially_eligible_samples_2017.txt",sep="\t",quote=F,col.names=T,row.names=F)
+
+idx_micro=which(as.character(data[,1])%in%patients_with_potential_microarray_data)
+write.table(data[idx_micro,],"potentially_microarrayed_samples_2017.txt",sep="\t",quote=F,col.names=T,row.names=F)
+
+
+  tmp=as.character(unique(data[,1]))
+ eligible_3_sample=NULL
+ for(patient in 1:length(tmp)){
+ idx=which(as.character(data[,1])==tmp[patient])
+ if("2"%in%as.character(data[idx,2]) & "3"%in%as.character(data[idx,2]) & "4"%in%as.character(data[idx,2])){
+ tmp_idx2=which(as.character(data[idx,8])=="2")
+ tmp_idx3=which(as.character(data[idx,8])=="3")
+ tmp_idx4=which(as.character(data[idx,8])=="4")
+if(as.character(data[idx[tmp_idx2],19])=="1" && as.character(data[idx[tmp_idx3],19])=="1" && as.character(data[idx[tmp_idx4],19])=="1"){
+eligible_3_sample=c(eligible_3_sample,tmp[patient])
+} 
+ }
+ }
+ 
+idx_eli3=which(as.character(data[,1])%in%eligible_3_sample)
+write.table(data[idx_eli3,],"potentially_eligible_samples_at_timepoints_2_3_4_2017.txt",sep="\t",quote=F,col.names=T,row.names=F)
+
+
+tmp=unlist(strsplit(as.character(data[,7]),":"))
+freqA=as.numeric(tmp[seq(from=2,to=length(tmp),by=2)])
+tmp=unlist(strsplit(as.character(data[,8]),":"))
+freqB=as.numeric(tmp[seq(from=2,to=length(tmp),by=2)])
+tmp=unlist(strsplit(as.character(data[,15]),":"))
+freqA2=as.numeric(tmp[seq(from=2,to=length(tmp),by=2)])
+tmp=unlist(strsplit(as.character(data[,16]),":"))
+freqB2=as.numeric(tmp[seq(from=2,to=length(tmp),by=2)])
+
+ABmax=pmax(freqA,freqB)
+AB2max=pmax(freqA2,freqB2)
+allmax=pmax(ABmax,AB2max)
+difference=abs(AB2max-ABmax)/allmax
+#
+
+#the following gives us columns: chrom, pos,al1,al2,AF,INFO
+cat 22.gwas2.alleles|awk '{split($8,arr,"AC=");split(arr[2],arr2,";");split($8,arr3,"INFO=");split(arr3[2],arr4,";");split($8,arr5,"AN=");split(arr5[2],arr6,";");print $1,$2,$4,$5,arr2[1]/arr6[1],arr4[1]}'|more
+
+
+##bcftools annotate
+bgzip 22.gwas1.tokeep.updatedIDs.txt
+tabix -s1 -b2 -e2 22.gwas1.tokeep.updatedIDs.txt.gz
+bcftools annotate -a 22.gwas1.tokeep.updatedIDs.txt.gz -c CHROM,POS,ID,REF,ALT,-,- -O z -o 22.vcf.gz.annotated 22.vcf.gz
+
+#extract variants from vcf annotated file
+plink --allow-no-sex --vcf 21.vcf.gz.annotated --extract 21.gwas1.tokeep.txt.forplink  --keep-allele-order --out 21.vcf.gz.filtered --recode vcf-iid --const-fid
+
+#for getting IBS files for TILI
+plink --bfile Helmsley_Ahmad_TIM2-TIH_G4L_birdsuite.qc2 --bmerge  TIM_controls_BIRDSUITE.corrected.qc2 --exclude plink.prune.out --genome --out merged_tili.qc2
+
+
+#for calculating PCs:
+bin/smartpca.perl -i /lustre/scratch115/projects/crohns/exome/TIH/merged_tili.qc2.ped -a /lustre/scratch115/projects/crohns/exome/TIH/merged_tili.qc2.map -k 10 -m 0 -o /lustre/scratch115/projects/crohns/exome/TIH/merged_tili.qc2.pca -p /lustre/scratch115/projects/crohns/exome/TIH/merged_tili.qc2.plot -e /lustre/scratch115/projects/crohns/exome/TIH/merged_tili.qc2.eval -l /lustre/scratch115/projects/crohns/exome/TIH/merged_tili.qc2.log -b /lustre/scratch115/projects/crohns/exome/TIH/merged_tili.qc2.ped -snpweightoutname 
+
+#comparison of my imputation with Katie's (after converting Katie's file from gen to vcf using qctool)
+#Katie's (note that files need to be bgzipped and tabix-indexed):
+bcftools stats /lustre/scratch115/projects/ibdgwas/post_imputation/GWAS1/22.vcf.gz /lustre/scratch115/projects/ibdgwas/new_imputation/GWAS1M25.vcfs/22.filtered.vcf.gz --verbose -c all
+
+
+#following is to get new wave TILI ctrls 
+plink --bfile /lustre/scratch115/projects/ibdgwas/new_wave/new_wave_qc3b --keep Loukas_exeter_sanger_patients_20161129_matched.txt.forplink --keep-allele-order --make-bed --out tili_ctrls_from_newwave
+
+#prepare files for HLA imputation
+plink --vcf new_wave_qc3b_autosomes.flipped.RefAlt.updated_IDs.fixref.M25.srt.vcf --make-bed --out new_wave_qc3b.final.xMHC --from-mb 24 --to-mb 38 --chr 6 --allow-no-sex --const-fid
+
+#to check for  duplicates ( I do this in R):
+remove_dups_from_bim.r

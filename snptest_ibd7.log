@@ -1,0 +1,256 @@
+Welcome to SNPTEST v2.5
+© University of Oxford 2008-2013
+https://mathgen.stats.ox.ac.uk/genetics_software/snptest/snptest.html
+Read LICENCE file for conditions of use.
+
+==============
+
+Data Files : 
+ -gen files : /lustre/scratch113/projects/crohns/RELEASE/v2/IBDseq/7.gen.gz 
+ -sample files : /lustre/scratch113/projects/crohns/RELEASE/v1/IBDseq/IBDseq.sample 
+
+Tests : 
+ -frequentist : 1
+ -method score -cov_all_continuous : conditioning on all continuous covariates
+
+
+reading sample exclusion lists
+ -/lustre/scratch113/teams/anderson/users/jga/001_Projects/Project2_FineMappingSeqData/ucSamplesAndFailSamples.23Jul2015.txt [1767 sample IDs read in]
+
+reading snps exclusion list 
+ -/lustre/scratch113/teams/anderson/users/jga/001_Projects/Project2_FineMappingSeqData/SNPsPassFilters/7.IBD.snps.NoPassFilters.OnlyIDs.txt[7267322 snp ID's read in]
+
+Inspecting data (this may take some time)...
+Filtering SNPs based on filter:
+- NOT( SNPID or RSID in { set of 7267304 } ) AND position in 6545183-6545193
+
+Sample and exclusions summary :
+ - Number of individuals in : (cohort 1) 
+       ...before exclusions : 8097       
+        ...after exclusions : 6330       
+
+Reading sample files :
+Summary of covariates and phenotypes
+ # discrete variables : 0
+ # continuous variables : 12
+  cov1 : type = C (Continuous covariate)
+  cov2 : type = C (Continuous covariate)
+  cov3 : type = C (Continuous covariate)
+  cov4 : type = C (Continuous covariate)
+  cov5 : type = C (Continuous covariate)
+  cov6 : type = C (Continuous covariate)
+  cov7 : type = C (Continuous covariate)
+  cov8 : type = C (Continuous covariate)
+  cov9 : type = C (Continuous covariate)
+  cov10 : type = C (Continuous covariate)
+  rsid~7:2789880_A_C:additive_dosage : type = C (Continuous covariate)
+  rsid~7:50319807_G_A:additive_dosage : type = C (Continuous covariate)
+ # phenotypes : 1
+  bin1 : type = B (Binary phenotype)
+Covariate summary :
+  cov1                                :                 missing  min      max      mean     variance
+                                        (unnormalised): 0        -0.1700  0.0127   -0.0001  0.0001  
+                                          (normalised): 0        -15.3523 1.1577   -0.0000  1.0000  
+                                           (histogram): 
+                                                          3709-|                            *  
+                                                               |                            *  
+                                                               |                            *  
+                                                               |                            *  
+                                                          1964-|                            *  
+                                                               |                            ** 
+                                                               |                            ** 
+                                                               |                            ** 
+                                                           218-|                           *** 
+                                                               +-------------------------------
+                                                                -15.62                     1.43
+  cov2                                :                 missing  min      max      mean     variance
+                                        (unnormalised): 0        -0.0369  0.0388   -0.0001  0.0000  
+                                          (normalised): 0        -8.3406  8.8408   -0.0000  1.0000  
+                                           (histogram): 
+                                                          2589-|              *                
+                                                               |              *                
+                                                               |              *                
+                                                               |              *                
+                                                          1370-|              **               
+                                                               |              **               
+                                                               |              **               
+                                                               |             *****             
+                                                           152-|             *****             
+                                                               +-------------------------------
+                                                                -8.62                      9.12
+  cov3                                :                 missing  min      max      mean     variance
+                                        (unnormalised): 0        -0.0302  0.0538   0.0001   0.0001  
+                                          (normalised): 0        -2.7850  4.9346   -0.0000  1.0000  
+                                           (histogram): 
+                                                          1093-|        **                     
+                                                               |        **                     
+                                                               |        **                     
+                                                               |       ****                    
+                                                           578-|       ****                    
+                                                               |       ****                    
+                                                               |       *****                   
+                                                               |       ****** *****            
+                                                            64-|      **************           
+                                                               +-------------------------------
+                                                                -2.91                      5.06
+  cov4                                :                 missing  min      max      mean     variance
+                                        (unnormalised): 0        -0.0280  0.6905   0.0000   0.0002  
+                                          (normalised): 0        -2.2478  55.3071  -0.0000  1.0000  
+                                           (histogram): 
+                                                          5899-| *                             
+                                                               | *                             
+                                                               | *                             
+                                                               | *                             
+                                                          3123-| *                             
+                                                               | *                             
+                                                               | *                             
+                                                               | *                             
+                                                           347-| *                             
+                                                               +-------------------------------
+                                                                -3.18                     56.25
+  cov5                                :                 missing  min      max      mean     variance
+                                        (unnormalised): 0        -0.3314  0.0403   -0.0000  0.0001  
+                                          (normalised): 0        -28.9921 3.5321   0.0000   1.0000  
+                                           (histogram): 
+                                                          2499-|                           *   
+                                                               |                           *   
+                                                               |                           *   
+                                                               |                           *   
+                                                          1323-|                          ***  
+                                                               |                          ***  
+                                                               |                          ***  
+                                                               |                         ****  
+                                                           147-|                         ****  
+                                                               +-------------------------------
+                                                                -29.52                     4.07
+  cov6                                :                 missing  min      max      mean     variance
+                                        (unnormalised): 0        -0.8449  0.0381   -0.0000  0.0001  
+                                          (normalised): 0        -69.0780 3.1157   -0.0000  1.0000  
+                                           (histogram): 
+                                                          5198-|                             * 
+                                                               |                             * 
+                                                               |                             * 
+                                                               |                             * 
+                                                          2752-|                             * 
+                                                               |                             * 
+                                                               |                             * 
+                                                               |                             * 
+                                                           306-|                            ** 
+                                                               +-------------------------------
+                                                                -70.24                     4.30
+  cov7                                :                 missing  min      max      mean     variance
+                                        (unnormalised): 0        -0.8860  0.3467   -0.0000  0.0002  
+                                          (normalised): 0        -71.0851 27.8253  0.0000   1.0000  
+                                           (histogram): 
+                                                          4750-|                      *        
+                                                               |                      *        
+                                                               |                      *        
+                                                               |                      *        
+                                                          2514-|                      *        
+                                                               |                      *        
+                                                               |                      *        
+                                                               |                     **        
+                                                           279-|                     **        
+                                                               +-------------------------------
+                                                                -72.68                    29.45
+  cov8                                :                 missing  min      max      mean     variance
+                                        (unnormalised): 0        -0.9199  0.0748   -0.0000  0.0002  
+                                          (normalised): 0        -73.7475 5.9972   -0.0000  1.0000  
+                                           (histogram): 
+                                                          5923-|                            *  
+                                                               |                            *  
+                                                               |                            *  
+                                                               |                            *  
+                                                          3136-|                            *  
+                                                               |                            *  
+                                                               |                            *  
+                                                               |                            *  
+                                                           348-|                            *  
+                                                               +-------------------------------
+                                                                -75.03                     7.30
+  cov9                                :                 missing  min      max      mean     variance
+                                        (unnormalised): 0        -0.8405  0.2573   -0.0000  0.0002  
+                                          (normalised): 0        -67.5221 20.6769  0.0000   1.0000  
+                                           (histogram): 
+                                                          5942-|                       *       
+                                                               |                       *       
+                                                               |                       *       
+                                                               |                       *       
+                                                          3146-|                       *       
+                                                               |                       *       
+                                                               |                       *       
+                                                               |                       *       
+                                                           350-|                       *       
+                                                               +-------------------------------
+                                                                -68.94                    22.12
+  cov10                               :                 missing  min      max      mean     variance
+                                        (unnormalised): 0        -0.8973  0.2421   0.0000   0.0002  
+                                          (normalised): 0        -71.6660 19.3341  -0.0000  1.0000  
+                                           (histogram): 
+                                                          5876-|                        *      
+                                                               |                        *      
+                                                               |                        *      
+                                                               |                        *      
+                                                          3111-|                        *      
+                                                               |                        *      
+                                                               |                        *      
+                                                               |                        *      
+                                                           346-|                        *      
+                                                               +-------------------------------
+                                                                -73.13                    20.83
+  rsid~7:2789880_A_C:additive_dosage  :                 missing  min      max      mean     variance
+                                        (unnormalised): 0        0.0000   2.0000   0.5937   0.4150  
+                                          (normalised): 0        -0.9217  2.1831   -0.0000  1.0000  
+                                           (histogram): 
+                                                            32-|               *               
+                                                               |               *               
+                                                               |               *               
+                                                               |               *               
+                                                            17-|               *               
+                                                               |              **               
+                                                               |              **              *
+                                                               |*             **              *
+                                                             2-|**  *   *  * ***          *  **
+                                                               +-------------------------------
+                                                                -0.97                      2.23
+  rsid~7:50319807_G_A:additive_dosage :                 missing  min      max      mean     variance
+                                        (unnormalised): 0        0.0000   2.0000   1.1839   0.4880  
+                                          (normalised): 0        -1.6947  1.1682   -0.0000  1.0000  
+                                           (histogram): 
+                                                            49-|               *               
+                                                               |               *               
+                                                               |               *               
+                                                               |               *               
+                                                            26-|               *               
+                                                               |               *               
+                                                               |               *              *
+                                                               |*             **              *
+                                                             3-|*            ****             *
+                                                               +-------------------------------
+                                                                -1.74                      1.22
+Phenotype summary :
+  bin1                                : missing  levels
+                                        0        0(3652) 1(2678)
+
+You are conditioning on the following covariates:
+ -rsid~7:2789880_A_C:additive_dosage
+ -rsid~7:50319807_G_A:additive_dosage
+
+Phenotype being used : bin1
+
+Data Summaries : 
+ -number of SNPs = (unknown)
+
+Data with missing genotype data threshold and exclusion list applied :
+ /lustre/scratch113/projects/crohns/RELEASE/v2/IBDseq/7.gen.gz : 6330
+
+--------------------------------------------------------------------------
+
+SinglePhenotypeTest
+--------------------------------------------------------------------------
+
+Analyzing Data :
+ scanning... read chunk [1 of (unknown)]... done.
+ scanning... no more data.
+
+finito
