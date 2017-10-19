@@ -77,7 +77,7 @@ idx_miss=which(!tmp%in%all_idx)
 hapinfo[which(hapinfo[,2]%in%pcafam[idx_miss,13]),] #from this you can see that all ones with missing info are mexicans
 
  pc1=9
- pc2=10
+ pc2=3
 plot(pcafam[,pc1+1],pcafam[,pc2+1],pch=19,xlab=paste("PC",pc1,sep=""),ylab=paste("PC",pc2,sep=""),main=list(paste("PC",pc1," vs PC",pc2,sep=""),cex=1.1),col="white")
 abline(h=0.028,lty=2)
 points(pcafam[amr_pca_idx,pc1+1],pcafam[amr_pca_idx,pc2+1],pch=19,col="pink")
@@ -118,12 +118,14 @@ toremove_pc2_cases=which(pcafam[pca_cases_idx,2+1]<0.0125)
 toremove_pc2_ctrls=which(pcafam[pca_ctrls_idx,2+1]<0.0125)
 
 #toremove_pc3_cases=which(pcafam[pca_cases_idx,3+1]< -0.015)
-toremove_pc3_ctrls=which(pcafam[pca_ctrls_idx,3+1]>0.001)
-toremove_pc3_cases=which(pcafam[pca_cases_idx,3+1]>0.001)
+toremove_pc3_ctrls=which(pcafam[pca_ctrls_idx,3+1]> -0.004)
+toremove_pc3_cases=which(pcafam[pca_cases_idx,3+1]> -0.004)
 toremove_pc4_ctrls=which(pcafam[pca_ctrls_idx,4+1]> -0.0035)
 toremove_pc4_cases=which(pcafam[pca_cases_idx,4+1]> -0.0035)
-toremove_pc6_ctrls=which(pcafam[pca_ctrls_idx,6+1]< -0.0075)
-toremove_pc6_cases=which(pcafam[pca_cases_idx,6+1]< -0.0075)
+toremove_pc6_ctrls=which(pcafam[pca_ctrls_idx,6+1]< -0.005)
+toremove_pc6_cases=which(pcafam[pca_cases_idx,6+1]< -0.005)
+toremove_pc6b_ctrls=which(pcafam[pca_ctrls_idx,6+1]> 0.014)
+toremove_pc6b_cases=which(pcafam[pca_cases_idx,6+1]> 0.014)
 toremove_pc7_ctrls=which(pcafam[pca_ctrls_idx,7+1]>0.005)
 toremove_pc7_cases=which(pcafam[pca_cases_idx,7+1]>0.005)
 toremove_pc8_ctrls=which(pcafam[pca_ctrls_idx,8+1]>0.015)
@@ -132,33 +134,35 @@ toremove_pc8_cases=which(pcafam[pca_cases_idx,8+1]>0.015)
 #toremove_pc7_cases2=which(pcafam[pca_cases_idx,7+1]< -0.025)
 
 #***Des tin PC9, stin opoia tha mporousa na efarmosw ena akoma threshold, kai me to opoio tha exana 36 samples (3 cases, 33 ctrls):
-toremove_pc9_cases=which(pcafam[pca_cases_idx,9+1]< -0.002)
-toremove_pc9_ctrls=which(pcafam[pca_ctrls_idx,9+1]< -0.002)
+toremove_pc9_cases=which(pcafam[pca_cases_idx,9+1]< 0)
+toremove_pc9_ctrls=which(pcafam[pca_ctrls_idx,9+1]< 0)
+toremove_pc9b_cases=which(pcafam[pca_cases_idx,9+1]> 0.03)
+toremove_pc9b_ctrls=which(pcafam[pca_ctrls_idx,9+1]> 0.03)
 
-toremove_cases=unique(c(toremove_pc1_cases,toremove_pc2_cases,toremove_pc3_cases,toremove_pc4_cases,toremove_pc6_cases,toremove_pc7_cases,toremove_pc8_cases,toremove_pc9_cases))
-toremove_ctrls=unique(c(toremove_pc1_ctrls,toremove_pc2_ctrls,toremove_pc3_ctrls,toremove_pc4_ctrls,toremove_pc6_ctrls,toremove_pc7_ctrls,toremove_pc8_ctrls,toremove_pc9_ctrls))
+toremove_cases=unique(c(toremove_pc1_cases,toremove_pc2_cases,toremove_pc3_cases,toremove_pc4_cases,toremove_pc6_cases,toremove_pc7_cases,toremove_pc8_cases,toremove_pc9_cases,toremove_pc9b_cases))
+toremove_ctrls=unique(c(toremove_pc1_ctrls,toremove_pc2_ctrls,toremove_pc3_ctrls,toremove_pc4_ctrls,toremove_pc6_ctrls,toremove_pc7_ctrls,toremove_pc8_ctrls,toremove_pc9_ctrls,toremove_pc9b_ctrls))
 
 #these are the cases and controls to be removed:
 pcafam[pca_cases_idx[toremove_cases],33:34]
 pcafam[pca_ctrls_idx[toremove_ctrls],33:34]
-write.table(pcafam[pca_ctrls_idx[toremove_ctrls],33:34],"ctrls_to_remove_due_to_PCA_qc1d.txt",quote=F,col.names=F,row.names=F)
-write.table(pcafam[pca_cases_idx[toremove_cases],33:34],"cases_to_remove_due_to_PCA_qc1d.txt",quote=F,col.names=F,row.names=F)
+write.table(pcafam[pca_ctrls_idx[toremove_ctrls],33:34],"ctrls_to_remove_due_to_PCA_qc1d.oct.txt",quote=F,col.names=F,row.names=F)
+write.table(pcafam[pca_cases_idx[toremove_cases],33:34],"cases_to_remove_due_to_PCA_qc1d.oct.txt",quote=F,col.names=F,row.names=F)
 ##replot
 
 
- pc1=5
- pc2=9
+ pc1=9
+ pc2=10
 plot(pcafam[,pc1+1],pcafam[,pc2+1],pch=19,xlab=paste("PC",pc1,sep=""),ylab=paste("PC",pc2,sep=""),main=list(paste("PC",pc1," vs PC",pc2,sep=""),cex=1.1),col="white")
-points(pcafam[amr_pca_idx,pc1+1],pcafam[amr_pca_idx,pc2+1],pch=19,col="purple")
-points(pcafam[idx_miss,pc1+1],pcafam[idx_miss,pc2+1],pch=19,col="purple")
-points(pcafam[sas_pca_idx,pc1+1],pcafam[sas_pca_idx,pc2+1],pch=19,col="purple")
-points(pcafam[eas_pca_idx,pc1+1],pcafam[eas_pca_idx,pc2+1],pch=19,col="purple")
-points(pcafam[afr_pca_idx,pc1+1],pcafam[afr_pca_idx,pc2+1],pch=19,col="purple")
+points(pcafam[amr_pca_idx,pc1+1],pcafam[amr_pca_idx,pc2+1],pch=19,col="gray")
+points(pcafam[idx_miss,pc1+1],pcafam[idx_miss,pc2+1],pch=19,col="gray")
+points(pcafam[sas_pca_idx,pc1+1],pcafam[sas_pca_idx,pc2+1],pch=19,col="gray")
+points(pcafam[eas_pca_idx,pc1+1],pcafam[eas_pca_idx,pc2+1],pch=19,col="gray")
+points(pcafam[afr_pca_idx,pc1+1],pcafam[afr_pca_idx,pc2+1],pch=19,col="gray")
 points(pcafam[gbr_pca_idx,pc1+1],pcafam[gbr_pca_idx,pc2+1],pch=19,col="yellow")
 points(pcafam[eur_pca_idx,pc1+1],pcafam[eur_pca_idx,pc2+1],pch=19,col="yellow")
 points(pcafam[fin_pca_idx,pc1+1],pcafam[fin_pca_idx,pc2+1],pch=19,col="yellow")
-points(pcafam[pca_cases_idx[-toremove_cases],pc1+1],pcafam[pca_cases_idx[-toremove_cases],pc2+1],pch=4,col="darkred")
 points(pcafam[pca_ctrls_idx[-toremove_ctrls],pc1+1],pcafam[pca_ctrls_idx[-toremove_ctrls],pc2+1],pch=4,col="darkblue")
+points(pcafam[pca_cases_idx[-toremove_cases],pc1+1],pcafam[pca_cases_idx[-toremove_cases],pc2+1],pch=4,col="darkred")
 abline(h=0.15,col="darkgrey",lty=2)
 abline(v=0.15,col="darkgrey",lty=2)
 abline(h=-0.15,col="darkgrey",lty=2)

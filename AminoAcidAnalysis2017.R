@@ -5,15 +5,26 @@
 ##installation from the tar.gz file for 3.3.0. For example:
 #install.packages("/software/team152/Rpackages/S4Vectors_0.6.6.tar.gz",repos=NULL,type="source",lib="/software/team152/Rpackages/")
 
+DATASET="new_wave" # one of GWAS1 GWAS2 GWAS3 ichip new_wave
 
-DATADIR="/lustre/scratch115/projects/ibdgwas/HLA/new_reference_panel/"
-OUTDIR="/lustre/scratch115/projects/ibdgwas/HLA/AA/"
-LOCUS="DRB1"
-AADRB=read.table(paste("/lustre/scratch115/projects/ibdgwas/HLA/AA/AA.HLA_",LOCUS,".2017.txt",sep=""))
-HLA=read.table(paste(DATADIR,"HLA_",LOCUS,"_hibag.imputations.txt",sep=""),head=T,stringsAsFactors=FALSE)
+PREFIX=NULL
+if(DATASET=="GWAS1"){PREFIX="wtccc1_hg19.final"}
+if(DATASET=="GWAS2"){PREFIX="wtccc2_hg19.final"}
+if(DATASET=="GWAS3"){PREFIX="gwas3_final.unique"}
+if(DATASET=="new_wave"){PREFIX="new_wave_qc3b.final.unique"}
+if(DATASET=="ichip"){PREFIX="ichip_b37.final"}
+
+DATADIR=paste("/lustre/scratch115/projects/ibdgwas/HLA/HLA_imputations/4D/best_guess/",DATASET,"/",sep="")
+OUTDIR=paste("/lustre/scratch115/projects/ibdgwas/HLA/HLA_imputations/AA/",DATASET,"/",sep="")
+LOCI=c("A","C","B","DRB1","DQA1","DQB1","DPB1")
+for(loc in 1:length(LOCI)){
+#LOCUS="DPB1"
+LOCUS=LOCI[loc]
+AADRB=read.table(paste("/lustre/scratch115/projects/ibdgwas/HLA/AA_sequences/AA.HLA_",LOCUS,".2017.txt",sep=""))
+HLA=read.table(paste(DATADIR,PREFIX,".xMHC.HLA_",LOCUS,".4D.bestguess.txt",sep=""),head=T,stringsAsFactors=FALSE)
 library(reshape2,lib="/software/team152/Rpackages/")
 
-POSTERIOR_THRESHOLD=0.7
+POSTERIOR_THRESHOLD=0.5
 #but first put all AAs together:
 AADRB_FULL=do.call(paste, c(AADRB[2:dim(AADRB)[2]], sep=""))#nice use of do.call
 DRBSEQ=colsplit(AADRB_FULL,pattern="",names=seq(1:nchar(AADRB_FULL[1]))) #now we have a table that can be used
@@ -84,7 +95,7 @@ third_col=paste(100000*1:dim(AA_COUNTS_GEN)[2],sep="")
 
 GENFIN=cbind(first_col,second_col,third_col,mainAminoacids,allotherAminoacids,t(AA_COUNTS_GEN))
 write.table(GENFIN,paste(OUTDIR,"HLA_",LOCUS,"_hibag.AA.imputations_thres_",POSTERIOR_THRESHOLD,".gen",sep=""),quote=F,col.names=F,row.names=F)
-
+}
 
 #now turn this to .gen file
 

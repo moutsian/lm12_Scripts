@@ -129,18 +129,21 @@ IDX[i,6]=IDX[i,5]
 #at this stage, we should have 42 samples (as of July 26th, 2017) which are in the controls data sheet but NOT in our servers (26 are not in Nick's Sanger list, 11 are only typed on ichip, and 5 I couldn't find)
 # Now we should keep the remaining  - but remove the ones not in the data sheet - from the merged fam file.
 fam_tokeep=unique(c(which(fam[,2]%in%IDX[,5]),which(fam[,2]%in%IDX[,6])))
-list_of_samples_tokeep=fam[fam_tokeep,c(1:2)]
-write.table(list_of_samples_tokeep,"samples_to_keep_for_ctrls.txt",quote=F,col.names=F,row.names=F)
-#finally, update the fam file with the "proper" sample IDs for the study (I'm "using" the Family IDs too, keeping them as they are, to have both IDs in one file)
-fam_out=fam[fam_tokeep,]
+#update the fam file with the "proper" sample IDs for the study (I'm "using" the Family IDs too, keeping them as they are, to have both IDs in one file)
+fam_out=fam[sort(fam_tokeep),] #correction 17/10 ***
+#fam_out=fam[fam_tokeep,]
 for(i in 1:dim(fam_out)[1]){
 idx=unique(c(which(IDX[,5]==fam_out[i,2]),which(IDX[,6]==fam_out[i,2])))
 fam_out[i,1]=IDX[idx[1],1]
 }
 write.table(fam_out,"TILI_merged_all_ctrls.updated_with_studyIDs.fam",quote=F,col.names=F,row.names=F)
+list_of_samples_tokeep=fam_out[,c(1:2)]
+write.table(list_of_samples_tokeep,"samples_to_keep_for_ctrls.txt",quote=F,col.names=F,row.names=F)
 
-##now all that remains to do is to only keep the individuals in the "samples_to_keep_for_ctrls.txt" file, then update the fam file to the one above.
+##now all that remains to do is to only keep the individuals in the "samples_to_keep_for_ctrls.txt" file, **then update the fam file to the one above**.
+## Twra to diorthwsa, einai kanoniko logika
 plink --allow-no-sex --bfile /lustre/scratch115/projects/crohns/exome/TIH/TILI_merged_all_ctrls --keep samples_to_keep_for_ctrls.txt --keep-allele-order --make-bed --out TILI_final_ctrls
+mv TILI_merged_all_ctrls.updated_with_studyIDs.fam TILI_final_ctrls.fam
 
 #File to use in QC and downstream analyses: TILI_final_ctrls.bed
 
@@ -236,7 +239,9 @@ plink --bfile TILI_final_ctrls.qc1c --missing --out TILI_final_ctrls.qc1c
 plink --bfile TILI_final_cases.qc1c --remove cases_to_remove.qc1c.txt --out TILI_final_cases.qc1d --make-bed
 plink --bfile TILI_final_ctrls.qc1c --remove ctrls_to_remove.qc1c.txt --out TILI_final_ctrls.qc1d --make-bed
 cat cases_to_remove.qc1c.txt ctrls_to_remove.qc1c.txt > cases_and_ctrls_to_remove.qc1c.txt
-plink --bfile TILI_merged.qc1c --remove ctrls_to_remove.qc1c.txt --out TILI_merged.qc1d --make-bed
+#plink --bfile TILI_merged.qc1c --remove ctrls_to_remove.qc1c.txt --out TILI_merged.qc1d --make-bed
+plink --bfile TILI_merged.qc1c --remove cases_and_ctrls_to_remove.qc1c.txt --out TILI_merged.qc1d --make-bed
+
 
 #prepare imiss again now that some variants were removed.
 plink --bfile TILI_final_cases.qc1d --missing --out TILI_final_cases.qc1d
@@ -249,27 +254,37 @@ plink --bfile TILI_final_cases.qc1d --het --out TILI_final_cases.qc1d
 # this should also help with potential snps with different strands in the two platforms that got away.
 #For this run compare_sanger_and_broad_freqs.R
 
-#then remove these additional snps ***Note Sept 2017 - the following step is superfluous after doing the ctrl-ctrl association test
+#then remove these additional snps 
+*** Note Sept 2017 - I have replaced the following step with the ctrl-ctrl association test
+#plink --bfile TILI_final_ctrls.qc1d --remove sanger_ctrls_qc2.txt --out TILI_final_ctrls.qc1d.broad --freq
+#plink --bfile TILI_final_ctrls.qc1d --keep sanger_ctrls_qc2.txt --out TILI_final_ctrls.qc1d.sanger --freq
 #plink --bfile TILI_final_ctrls.qc1d --exclude snps_to_remove_because_of_diff_frq_in_sanger_vs_broad.txt.forplink --out TILI_final_ctrls.qc1dtmp --make-bed
 #plink --bfile TILI_final_cases.qc1d --exclude snps_to_remove_because_of_diff_frq_in_sanger_vs_broad.txt.forplink --out TILI_final_cases.qc1dtmp --make-bed
-
-
 
 ##now get pruned subset of variants for controls, to use for IBS and PCA.
 plink --bfile TILI_merged.qc1d --exclude /lustre/scratch115/projects/crohns/exome/TIH/aux_and_intermediate_files/high_ld.txt --indep-pairwise 1000 50 0.2 --out TILI_set_for_IBS_qc1d
 ##then get IBS estimates
 plink --allow-no-sex --bfile TILI_merged.qc1d  --exclude TILI_set_for_IBS_qc1d.prune.out --genome --out TILI_merged.qc1d.forIBS
 
-
 ##based on these, remove samples with high pairwise ibs ** for now just from the merged dataset. Then make a list of the ones to remove due to being PCA outliers, and THEN remove them
 #from the respective datasets.
-plink --allow-no-sex --bfile TILI_merged.qc1d --exclude TILI_set_for_IBS.prune.out  --remove high_ibs_TILI_qc3.samples.toremove.txt --recode --make-bed --out TILI_merged.qc1d.pruned.filtered
+cat TILI_merged.qc1d.forIBS.genome|awk '{if($10>0.185){print $1,$2,$3,$4,$10}}'|sed 's/ /\t/g' > high_ibs_TILI_qc1d.txt
+
+#Oct 17: Recreate the imiss file, to have it with the updated IDs.
+plink --bfile TILI_merged.qc1d --missing --out TILI_merged.qc1d
+plink --allow-no-sex --bfile TILI_merged.qc1d --exclude TILI_set_for_IBS.prune.out  --remove high_ibs_TILI_qc1d.samples.toremove.txt --recode --make-bed --out TILI_merged.qc1d.pruned.filtered
+
+# ** 744 individuals remaining in the pruned merged dataset, but remember to remove these from the actual files too.
 
 ##now calculate PCs using the pruned merged dataset we just created.
-
-#note that because of a limit with the number of characters for sample_IDs and variants, I removed the 'urn:wtsi' from the sample IDs from the TILI_merged.qc3.pruned.pedind,TILI_merged.qc3.pruned.ped files
-
-smartpca.perl -i /lustre/scratch115/projects/crohns/exome/TIH/TILI_merged.qc1d.pruned.filtered.ped -a /lustre/scratch115/projects/crohns/exome/TIH/TILI_merged.qc1d.pruned.filtered.map -k 10 -m 0 -o /lustre/scratch115/projects/crohns/exome/TIH/TILI_merged.qc1d.pruned.filtered.pca -p /lustre/scratch115/projects/crohns/exome/TIH/TILI_merged.qc1d.pruned.filtered.plot -e /lustre/scratch115/projects/crohns/exome/TIH/TILI_merged.qc1d.pruned.filtered.eval -l /lustre/scratch115/projects/crohns/exome/TIH/TILI_merged.qc1d.pruned.filtered.log -b /lustre/scratch115/projects/crohns/exome/TIH/TILI_merged.qc1d.pruned.filtered.pedind -snpweightoutname TILI_merged.qc1d.pca_loadings 
+# note that because of a limit with the number of characters for sample_IDs and variants, 
+# I remove the 'urn:wtsi' from the sample IDs from the TILI_merged.qc1d.pruned.pedind,TILI_merged.qc1d.pruned.ped files
+cat TILI_merged.qc1d.pruned.filtered.ped|awk '{print $1,$2,$3,$4,$5,$6}'> TILI_merged.qc1d.pruned.filtered.pedind
+sed -i 's/urn:wtsi//g' TILI_merged.qc1d.pruned.filtered.ped*
+TILIDIR="/lustre/scratch115/projects/crohns/exome/TIH/"
+smartpca.perl -i ${TILIDIR}TILI_merged.qc1d.pruned.filtered.ped -a ${TILIDIR}TILI_merged.qc1d.pruned.filtered.map -k 10 -m 0 \
+-o ${TILIDIR}TILI_merged.qc1d.pruned.filtered.pca -p ${TILIDIR}TILI_merged.qc1d.pruned.filtered.plot -e ${TILIDIR}TILI_merged.qc1d.pruned.filtered.eval \
+-l ${TILIDIR}TILI_merged.qc1d.pruned.filtered.log -b ${TILIDIR}TILI_merged.qc1d.pruned.filtered.pedind -snpweightoutname ${TILIDIR}TILI_merged.qc1d.pca_loadings 
 ##note that the above perl script will produce a .par file which will be then loaded into smartpca. To get the snp loadings, I had to manually change the .par file by
 ## adding the line 
 ## snpweightoutname: /lustre/scratch115/projects/crohns/exome/TIH/merged_tili.qc1d.loadings
@@ -311,13 +326,13 @@ smartpca -p TILI_merged.qc3.pruned.pca.with_eignestrat_removing_outliers.30.6.5.
 
 #After chatting with Carl, we decided to remove based on visual inspection together with 1KG. Removal lists are in files ctrls_to_remove_due_to_PCA.txt,cases_to_remove_due_to_PCA.txt
 # These should be removed from the merged file, and the remaining list is the list that should be used for the analysis. So, for cases and controls, the samples to be removed are:
-# high_ibs_TILI_qc3.samples.toremove.txt,ctrls_to_remove_due_to_PCA.txt,cases_to_remove_due_to_PCA.txt, cases_to_remove.txt, ctrls_to_remove.txt
+# high_ibs_TILI_qc1d.samples.toremove.txt,ctrls_to_remove_due_to_PCA.txt,cases_to_remove_due_to_PCA.txt, cases_to_remove.txt, ctrls_to_remove.txt
 #The files to use are TILI_final_ctrls.qc3, TILI_final_cases.qc3
-cat cases_to_remove.qc1c.txt cases_to_remove_due_to_PCA_qc1d.txt high_ibs_TILI_qc3.samples.toremove.txt > cases_to_remove_qc1d.txt
-cat ctrls_to_remove.qc1c.txt ctrls_to_remove_due_to_PCA_qc1d.txt high_ibs_TILI_qc3.samples.toremove.txt > ctrls_to_remove_qc1d.txt
+cat cases_to_remove.qc1c.txt cases_to_remove_due_to_PCA_qc1d.oct.txt high_ibs_TILI_qc1d.samples.toremove.txt > cases_to_remove_qc1d.oct.txt
+cat ctrls_to_remove.qc1c.txt ctrls_to_remove_due_to_PCA_qc1d.oct.txt high_ibs_TILI_qc1d.samples.toremove.txt > ctrls_to_remove_qc1d.oct.txt
 
-plink --allow-no-sex --bfile TILI_final_cases.qc1d  --remove cases_to_remove_qc1d.txt --make-bed --out TILI_final_cases.qc1e
-plink --allow-no-sex --bfile TILI_final_ctrls.qc1d  --remove ctrls_to_remove_qc1d.txt --make-bed --out TILI_final_ctrls.qc1e
+plink --allow-no-sex --bfile TILI_final_cases.qc1d  --remove cases_to_remove_qc1d.oct.txt --make-bed --out TILI_final_cases.qc1e
+plink --allow-no-sex --bfile TILI_final_ctrls.qc1d  --remove ctrls_to_remove_qc1d.oct.txt --make-bed --out TILI_final_ctrls.qc1e
 
 #now merge again, for the association analysis
 plink --bfile TILI_final_ctrls.qc1e --bmerge  TILI_final_cases.qc1e --out TILI_merged.qc1e
@@ -331,7 +346,9 @@ smartpca -p TILI_merged.qc1e.pca.par > TILI_merged.qc1e.pca.Sout
 
 #Trexw kai to SNPTEST2, me 4 PCs gia covariates afti ti fora, na dw pws meiwnetai to lambda. Just 4 PCs are significant and will be included in the analysis.
 plink --bfile TILI_merged.qc1e --recode oxford --out TILI_merged.qc1e
-snptest -data  TILI_merged.qc1e.gen TILI_merged.qc1e.samplee -o output/TILI_merged.qc1e.snptest_output.txt -frequentist 1  -cov_names pc1 pc2 pc3 pc4 -pheno phenotype -method score 
+snptest -data  TILI_merged.qc1e.gen TILI_merged.qc1e.samplee -o output/TILI_merged.qc1e.snptest_output.oct.txt -frequentist 1  -cov_names pc1 pc2 pc3 pc4 -pheno phenotype -method score 
+
+#***now will run Gareth's analyses - Oct2017
 
 ##rerun snptest2 mono gia hepatocellular TILI
 snptest -data  TILI_merged.qc1e.gen TILI_merged.qc1e.samplee -exclude_samples aux_and_intermediate_files/non_hepatocellular_cases.txt -o output/TILI_merged.qc1e.hepatocellular.snptest_output.txt -frequentist 1  -cov_names pc1 pc2 pc3 pc4 -pheno phenotype -method score 

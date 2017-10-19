@@ -1,5 +1,5 @@
-broad=read.table("/lustre/scratch115/projects/crohns/exome/TIH/TILI_final_ctrls.qc2.broad.frq",head=T)
-sanger=read.table("/lustre/scratch115/projects/crohns/exome/TIH/TILI_final_ctrls.qc2.sanger.frq",head=T)
+broad=read.table("/lustre/scratch115/projects/crohns/exome/TIH/TILI_final_ctrls.qc1d.broad.frq",head=T)
+sanger=read.table("/lustre/scratch115/projects/crohns/exome/TIH/TILI_final_ctrls.qc1d.sanger.frq",head=T)
 #re-align
  disc=which(sanger[,3]!=broad[,3])
  sanger[disc,3] -> tmp
@@ -13,5 +13,5 @@ sanger=read.table("/lustre/scratch115/projects/crohns/exome/TIH/TILI_final_ctrls
   diffratio=differ/max_frq
   threshold=0.4
   toremove=which(diffratio>threshold & max_frq>0.05)
-  write.table(mrg[toremove,c(1:5,10:11)],"/lustre/scratch115/projects/crohns/exome/TIH/snps_to_remove_because_of_diff_frq_in_sanger_vs_broad.txt",quote=F,col.names=T,row.names=F)
+  write.table(mrg[toremove,c(1:5,10:11)],"/lustre/scratch115/projects/crohns/exome/TIH/snps_to_remove_because_of_diff_frq_in_sanger_vs_broad.qc1d.txt",quote=F,col.names=T,row.names=F)
  #END

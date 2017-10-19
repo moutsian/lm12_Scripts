@@ -1,0 +1,89 @@
+###Samples in vcf.gz files in dir /lustre/scratch114/projects/ibd_colors/dec_2015_analysis/genome_wide/filtering_dq_gq_callrate/oxford:
+cr90_gq20_dp8.postqc_analysis_interval_oxford.all.chrs.norelout1.oxf_int.baits.uk10k.exac3.annots.vep75.correct.vqsr999.both.vcf.gz
+   3877    3877   62032
+cr90_gq20_dp8.postqc_analysis_interval_oxford_eu.all.chrs.norelout1.oxf_int.baits.uk10k.exac3.annots.vep75.correct.vqsr999.both.vcf.gz
+   3700    3700   59200
+cr90_gq20_dp8.postqc_analysis_interval_oxford_eu_north.all.chrs.norelout1.oxf_int.baits.uk10k.exac3.annots.vep75.correct.vqsr999.both.vcf.gz
+   3575    3575   57200
+cr90_gq20_dp8.postqc_analysis_oxford.all.chrs.norelout1.oxf_int.baits.uk10k.exac3.annots.vep75.correct.vqsr999.both.vcf.gz
+    627     627   10032
+cr90_gq20_dp8.postqc_analysis_oxford_eu.all.chrs.norelout1.oxf_int.baits.uk10k.exac3.annots.vep75.correct.vqsr999.both.vcf.gz
+    579     579    9264
+cr90_gq20_dp8.postqc_analysis_oxford_eu_north.all.chrs.norelout1.oxf_int.baits.uk10k.exac3.annots.vep75.correct.vqsr999.both.vcf.gz
+    564     564    9024
+gq20_dp8.postqc_analysis_interval_oxford.all.chrs.norelout1.oxf_int.baits.uk10k.exac3.annots.vep75.correct.vqsr999.both.vcf.gz
+   3877    3877   62032
+gq20_dp8.postqc_analysis_interval_oxford_eu.all.chrs.norelout1.oxf_int.baits.uk10k.exac3.annots.vep75.correct.vqsr999.both.vcf.gz
+   3700    3700   59200
+gq20_dp8.postqc_analysis_interval_oxford_eu_north.all.chrs.norelout1.oxf_int.baits.uk10k.exac3.annots.vep75.correct.vqsr999.both.vcf.gz
+   3575    3575   57200
+gq20_dp8.postqc_analysis_oxford.all.chrs.norelout1.oxf_int.baits.uk10k.exac3.annots.vep75.correct.vqsr999.both.vcf.gz
+    627     627   10032
+gq20_dp8.postqc_analysis_oxford_eu.all.chrs.norelout1.oxf_int.baits.uk10k.exac3.annots.vep75.correct.vqsr999.both.vcf.gz
+    579     579    9264
+gq20_dp8.postqc_analysis_oxford_eu_north.all.chrs.norelout1.oxf_int.baits.uk10k.exac3.annots.vep75.correct.vqsr999.both.vcf.gz
+    564     564    9024
+maf.0.001.cr90_gq20_dp8.postqc_analysis_interval_oxford_eu.all.chrs.norelout1.oxf_int.baits.uk10k.exac3.annots.vep75.correct.vqsr999.both.vcf.gz
+   3700    3700   59200
+maf.0.001.cr90_gq20_dp8.postqc_analysis_oxford_eu.all.chrs.norelout1.oxf_int.baits.uk10k.exac3.annots.vep75.correct.vqsr999.both.vcf.gz
+    579     579    9264
+maf.0.005.cr90_gq20_dp8.postqc_analysis_interval_oxford_eu.all.chrs.norelout1.oxf_int.baits.uk10k.exac3.annots.vep75.correct.vqsr999.both.vcf.gz
+   3700    3700   59200
+maf.0.005.cr90_gq20_dp8.postqc_analysis_oxford_eu.all.chrs.norelout1.oxf_int.baits.uk10k.exac3.annots.vep75.correct.vqsr999.both.vcf.gz
+    579     579    9264
+maf.0.01.cr90_gq20_dp8.postqc_analysis_interval_oxford_eu.all.chrs.norelout1.oxf_int.baits.uk10k.exac3.annots.vep75.correct.vqsr999.both.vcf.gz
+   3700    3700   59200
+maf.0.01.cr90_gq20_dp8.postqc_analysis_oxford_eu.all.chrs.norelout1.oxf_int.baits.uk10k.exac3.annots.vep75.correct.vqsr999.both.vcf.gz
+    579     579    9264
+maf.singletons.cr90_gq20_dp8.postqc_analysis_interval_oxford_eu.all.chrs.norelout1.oxf_int.baits.uk10k.exac3.annots.vep75.correct.vqsr999.both.vcf.gz
+   3700    3700   59200
+maf.singletons.cr90_gq20_dp8.postqc_analysis_oxford_eu.all.chrs.norelout1.oxf_int.baits.uk10k.exac3.annots.vep75.correct.vqsr999.both.vcf.gz
+    579     579    9264
+
+	
+###Samples in vcf.gz files in dir: /lustre/scratch114/projects/ibd_colors/dec_2015_analysis/genome_wide/filtering_dq_gq_callrate/colors/
+correct.singletons.maf.singletons.cr90_gq20_dp8.postqc_analysis_colors_eu.all.chrs.norelout1.col_int.baits.uk10k.exac3.annots.vep75.correct.vqsr999.both.vcf.gz
+    104     104    1710
+correct.singletons.maf.singletons.cr90_gq20_dp8.postqc_analysis_interval_colors_eu.all.chrs.norelout1.col_int.baits.uk10k.exac3.annots.vep75.correct.vqsr999.both.vcf.gz
+   3787    3787   60592
+cr90_gq20_dp8.postqc_analysis_colors.all.chrs.norelout1.col_int.baits.uk10k.exac3.annots.vep75.correct.vqsr999.both.vcf.gz
+    145     145    2390
+cr90_gq20_dp8.postqc_analysis_colors_eu.all.chrs.norelout1.col_int.baits.uk10k.exac3.annots.vep75.correct.vqsr999.both.vcf.gz
+    104     104    1710
+cr90_gq20_dp8.postqc_analysis_colors_eu_north.all.chrs.norelout1.col_int.baits.uk10k.exac3.annots.vep75.correct.vqsr999.both.vcf.gz
+     93      93    1530
+cr90_gq20_dp8.postqc_analysis_interval_colors.all.chrs.norelout1.col_int.baits.uk10k.exac3.annots.vep75.correct.vqsr999.both.vcf.gz
+   3969    3969   63504
+cr90_gq20_dp8.postqc_analysis_interval_colors_eu.all.chrs.norelout1.col_int.baits.uk10k.exac3.annots.vep75.correct.vqsr999.both.vcf.gz
+   3787    3787   60592
+cr90_gq20_dp8.postqc_analysis_interval_colors_eu_north.all.chrs.norelout1.col_int.baits.uk10k.exac3.annots.vep75.correct.vqsr999.both.vcf.gz
+   3659    3659   58544
+gq20_dp8.postqc_analysis_colors.all.chrs.norelout1.col_int.baits.uk10k.exac3.annots.vep75.correct.vqsr999.both.vcf.gz
+    145     145    2390
+gq20_dp8.postqc_analysis_colors_eu.all.chrs.norelout1.col_int.baits.uk10k.exac3.annots.vep75.correct.vqsr999.both.vcf.gz
+    104     104    1710
+gq20_dp8.postqc_analysis_colors_eu_north.all.chrs.norelout1.col_int.baits.uk10k.exac3.annots.vep75.correct.vqsr999.both.vcf.gz
+     93      93    1530
+gq20_dp8.postqc_analysis_interval_colors.all.chrs.norelout1.col_int.baits.uk10k.exac3.annots.vep75.correct.vqsr999.both.vcf.gz
+   3969    3969   63504
+gq20_dp8.postqc_analysis_interval_colors_eu.all.chrs.norelout1.col_int.baits.uk10k.exac3.annots.vep75.correct.vqsr999.both.vcf.gz
+   3787    3787   60592
+gq20_dp8.postqc_analysis_interval_colors_eu_north.all.chrs.norelout1.col_int.baits.uk10k.exac3.annots.vep75.correct.vqsr999.both.vcf.gz
+   3659    3659   58544
+maf.0.001.cr90_gq20_dp8.postqc_analysis_colors_eu.all.chrs.norelout1.col_int.baits.uk10k.exac3.annots.vep75.correct.vqsr999.both.vcf.gz
+    104     104    1710
+maf.0.001.cr90_gq20_dp8.postqc_analysis_interval_colors_eu.all.chrs.norelout1.col_int.baits.uk10k.exac3.annots.vep75.correct.vqsr999.both.vcf.gz
+   3787    3787   60592
+maf.0.005.cr90_gq20_dp8.postqc_analysis_colors_eu.all.chrs.norelout1.col_int.baits.uk10k.exac3.annots.vep75.correct.vqsr999.both.vcf.gz
+    104     104    1710
+maf.0.005.cr90_gq20_dp8.postqc_analysis_interval_colors_eu.all.chrs.norelout1.col_int.baits.uk10k.exac3.annots.vep75.correct.vqsr999.both.vcf.gz
+   3787    3787   60592
+maf.0.01.cr90_gq20_dp8.postqc_analysis_colors_eu.all.chrs.norelout1.col_int.baits.uk10k.exac3.annots.vep75.correct.vqsr999.both.vcf.gz
+    104     104    1710
+maf.0.01.cr90_gq20_dp8.postqc_analysis_interval_colors_eu.all.chrs.norelout1.col_int.baits.uk10k.exac3.annots.vep75.correct.vqsr999.both.vcf.gz
+   3787    3787   60592
+maf.singletons.cr90_gq20_dp8.postqc_analysis_colors_eu.all.chrs.norelout1.col_int.baits.uk10k.exac3.annots.vep75.correct.vqsr999.both.vcf.gz
+    104     104    1710
+maf.singletons.cr90_gq20_dp8.postqc_analysis_interval_colors_eu.all.chrs.norelout1.col_int.baits.uk10k.exac3.annots.vep75.correct.vqsr999.both.vcf.gz
+   3787    3787   60592
+	

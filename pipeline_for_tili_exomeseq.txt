@@ -1,0 +1,82 @@
+#Pipeline for exome sequencing data filtering and analysis for the TILI cohort, using bcftools and vcftools
+
+#Remove variants which don't have PASS. Keep only biallelic variants. Also keep only the samples in the list.
+#At the moment we still need the IDs of 46 samples from Gareth/the Exeter guys.
+
+bsub -q normal -J vcf_filter -G team152 -n4 -R "span[hosts=1] select[mem>2500] rusage[mem=2500]" -M2500 -o /lustre/scratch115/projects/crohns/exome/TIH/exomeseq/vcffilter1poly.log /software/team152/bcftools/bin/./bcftools view -S /lustre/scratch115/projects/crohns/exome/TIH/exomeseq/list_of_samples_to_keep.cases.txt -O b -o /lustre/scratch115/projects/crohns/exome/TIH/exomeseq/tili_cases.biallelic.bcf --threads 4 -m2 -M2 -f PASS /lustre/scratch115/projects/crohns/exome/TIH/exomeseq/v31_ahmad.vcf.gz
+bsub -q normal -J vcf_filter -G team152 -n4 -R "span[hosts=1] select[mem>2500] rusage[mem=2500]" -M2500 -o /lustre/scratch115/projects/crohns/exome/TIH/exomeseq/vcffilter2poly.log /software/team152/bcftools/bin/./bcftools view -S /lustre/scratch115/projects/crohns/exome/TIH/exomeseq/list_of_samples_to_keep.ctrls.txt --force-samples -O b -o /lustre/scratch115/projects/crohns/exome/TIH/exomeseq/tili_ctrls.biallelic.bcf --threads 4  -m2 -M2 -f PASS /lustre/scratch115/projects/crohns/exome/TIH/exomeseq/v31_ahmad.vcf.gz
+bsub -q normal -J vcf_filter -G team152 -n4 -R "span[hosts=1] select[mem>2500] rusage[mem=2500]" -M2500 -o /lustre/scratch115/projects/crohns/exome/TIH/exomeseq/vcffilter3poly.log /software/team152/bcftools/bin/./bcftools view -S /lustre/scratch115/projects/crohns/exome/TIH/exomeseq/list_of_samples_to_keep.both.txt --force-samples -O b -o /lustre/scratch115/projects/crohns/exome/TIH/exomeseq/tili.poly.biallelic.bcf --threads 4 -c1:minor -m2 -M2 -f PASS /lustre/scratch115/projects/crohns/exome/TIH/exomeseq/v31_ahmad.vcf.gz
+/software/team152/bcftools/bin/./bcftools stats tili_cases.biallelic.bcf
+#something is wrong and bftools aborts (glibc exception)
+#to have a look at the variants in the file:
+bcftools query -f'%CHROM %POS %ID %REF %ALT\n'  /lustre/scratch115/projects/crohns/exome/TIH/exomeseq/tili_ctrls.biallelic.bcf > /lustre/scratch115/projects/crohns/exome/TIH/exomeseq/tili_ctrls.biallelic.variants
+bcftools query -f'%CHROM %POS %ID %REF %ALT\n'  /lustre/scratch115/projects/crohns/exome/TIH/exomeseq/tili_ctrls.biallelic.poly.bcf > /lustre/scratch115/projects/crohns/exome/TIH/exomeseq/tili_ctrls.biallelic.poly.variants
+bcftools query -f'%CHROM %POS %ID %REF %ALT %QUAL %FILTER\n'  /lustre/scratch115/projects/crohns/exome/TIH/exomeseq/v31_ahmad.vcf.gz > /lustre/scratch115/projects/crohns/exome/TIH/exomeseq/v31_ahmad.vcf.variants
+bcftools query -f %CHROM %POS %ID %REF %ALT %QUAL %FILTER %INFO\n  maf.0.01.cr90_gq20_dp8.postqc_analysis_interval_oxford_eu.all.chrs.norelout1.oxf_int.baits.uk10k.exac3.annots.vep75.correct.vqsr999.both.vcf.gz
+
+
+/software/team152/bcftools/bin/./bcftools stats -S tili.poly.biallelic.bcf
+
+
+#filter variants for missingness
+vcftools --bcf tili.poly.biallelic.bcf --max-missing 0.95 --recode-bcf --recode-INFO-all --out tili.poly.biallelic.nomiss
+# After filtering, kept 523313 out of a possible 559130 Sites
+#get stats of site missingness to confirm
+vcftools --bcf tili.poly.biallelic.nomiss.recode.bcf  --missing-site --out tili.poly.biallelic.nomiss.recode
+#replace missing IDs '.' with a name containing the chromosome and position.
+/software/team152/bcftools/bin/./bcftools annotate --set-id +'%CHROM\_%POS\_%REF\_%FIRST_ALT' tili.poly.biallelic.nomiss.recode.bcf -o tili.poly.biallelic.nomiss.recode.rs1.bcf
+#now extract the controls, to then get HWE stats for controls
+bsub -q normal -J vcf_filter -G team152 -n4 -R "span[hosts=1] select[mem>2500] rusage[mem=2500]" -M2500 -o /lustre/scratch115/projects/crohns/exome/TIH/exomeseq/vcfextract_ctrls.log /software/team152/bcftools/bin/./bcftools view -S /lustre/scratch115/projects/crohns/exome/TIH/exomeseq/list_of_samples_to_keep.ctrls.txt --force-samples -O b -o /lustre/scratch115/projects/crohns/exome/TIH/exomeseq/tili.poly.biallelic.nomiss.recode.rs1.ctrls.bcf --threads 4  -m2 -M2 -f PASS /lustre/scratch115/projects/crohns/exome/TIH/exomeseq/tili.poly.biallelic.nomiss.recode.rs1.bcf
+
+#get HWE stats
+vcftools --bcf /lustre/scratch115/projects/crohns/exome/TIH/exomeseq/tili.poly.biallelic.nomiss.recode.rs1.ctrls.bcf  --hardy --out /lustre/scratch115/projects/crohns/exome/TIH/exomeseq/tili.poly.biallelic.nomiss.recode.rs1.ctrls.bcf
+#to remove a subset we need their IDs, and need to make sure they have rsID or otherwise something in that column.
+#for now I have used the chr_pos_ref_alt format but I'd rather get proper dbSNP rsIDs.
+/software/team152/bcftools/bin/./bcftools view /lustre/scratch115/projects/crohns/exome/TIH/exomeseq/tili.poly.biallelic.nomiss.recode.rs1.bcf|awk '{print $1,$2,$3,$4,$5,$6,$7,$8}'|grep -v '#'> tili.poly.biallelic.nomiss.recode.rs1.variants
+python create_snplist_to_extract.py #this outputs a file with rsIDs, which should be fine for vcftools, though it does not work in practice
+cat tili.poly.biallelic.nomiss.recode.rs1.ctrls.bcf.hwe|awk '{if($6>1e-08){print $1"\t"$2}}'> snps_to_keep_after_hwe_check.txt #this is for bcftools -R option, though also doesn't work atm
+
+#option 1: Using vcftools (doesn't work atm)
+vcftools --bcf /lustre/scratch115/projects/crohns/exome/TIH/exomeseq/tili.poly.biallelic.nomiss.recode.rs1.bcf \
+--exclude /lustre/scratch115/projects/crohns/exome/TIH/exomeseq/tili.poly.biallelic.nomiss.recode.rs1.outofHWE.txt --recode-bcf \
+--out /lustre/scratch115/projects/crohns/exome/TIH/exomeseq/tili.poly.biallelic.qc1.bcf
+#option 2: Using bcftools (doesn't work as it is, but works once we bgzip and idenx the bcf file -see below)
+/software/team152/bcftools/bin/./bcftools view -R /lustre/scratch115/projects/crohns/exome/TIH/exomeseq/snps_to_keep_after_hwe_check.txt \
+/lustre/scratch115/projects/crohns/exome/TIH/exomeseq/tili.poly.biallelic.nomiss.recode.rs1.bcf \
+-o /lustre/scratch115/projects/crohns/exome/TIH/exomeseq/tili.poly.biallelic.qc1.bcf 
+
+#bcftools complains that the bcf file wasn't zipped with bgzip. To overcome this, I use the -Ob and index commands of bcftools as follows:
+/software/team152/bcftools/bin/./bcftools view  /lustre/scratch115/projects/crohns/exome/TIH/exomeseq/tili.poly.biallelic.nomiss.recode.rs1.bcf -I -Ob -o antegamisou.bcf  #i) bgzip
+bcftools index antegamisou.bcf #ii) indexing
+# Having finished these two steps, the command for removing the SNPs that are out of HWE can now be run:
+# (Note that bcftools *does not* like a header in the file with the list of variants/regions, so make sure there is none.)
+#bsub -q normal -J vcf_filter -G team152 -n1 -R "span[hosts=1] select[mem>4500] rusage[mem=4500]" -M4500 -o /lustre/scratch115/projects/crohns/exome/TIH/exomeseq/vcf_hwefilt.log /software/team152/bcftools/bin/./bcftools view -R /lustre/scratch115/projects/crohns/exome/TIH/exomeseq/snps_to_keep_after_hwe_check.txt -c1:minor -m2 -M2 -f PASS -o /lustre/scratch115/projects/crohns/exome/TIH/exomeseq/tili.poly.biallelic.qc1b.bcf /lustre/scratch115/projects/crohns/exome/TIH/exomeseq/antegamisou 
+
+#03/Oct: I am also removing duplicate entries because they seem to give trouble downstream with multiallelic SNPs (I used R, handle_duplicates_in_tili_exomeseq.R)
+/software/team152/bcftools/bin/./bcftools concat --rm-dup all -a -o antegamisou_rmvdup.bcf  antegamisou.bcf
+/software/team152/bcftools/bin/./bcftools view -R /lustre/scratch115/projects/crohns/exome/TIH/exomeseq/snps_to_keep_after_hwe_check_nodup.txt -c1:minor -m2 -M2  -o /lustre/scratch115/projects/crohns/exome/TIH/exomeseq/tili.poly.biallelic.qc1.bcf /lustre/scratch115/projects/crohns/exome/TIH/exomeseq/antegamisou.bcf 
+#the following should work (Petr's suggestion):
+/software/team152/bcftools/bin/./bcftools view -T /lustre/scratch115/projects/crohns/exome/TIH/exomeseq/snps_to_keep_after_hwe_check_nodup.txt -c1:minor -m2 -M2  -o /lustre/scratch115/projects/crohns/exome/TIH/exomeseq/tili.poly.biallelic.qc1.T.bcf /lustre/scratch115/projects/crohns/exome/TIH/exomeseq/antegamisou.bcf 
+
+#the following was just fiddling around for alternatives before the -T solution.
+#bcftools view tili.poly.biallelic.qc1.bcf | grep -v '#'| cut -f3 | awk '{a[$0]++; if(a[$0]==2) print; if (a[$0]>=2) print}'
+#bcftools view tili.poly.biallelic.qc1.bcf | awk '!uniq[$3]++' > tili.poly.biallelic.qc1.unique.bcf
+
+#list of the remaining variants:
+/software/team152/bcftools/bin/./bcftools view antegamisou.bcf|grep -v '#'|awk '{print $1,$2,$3,$4,$5,$6,$7,$8}' > antegamisou.variants
+/software/team152/bcftools/bin/./bcftools view antegamisou_rmvdup.bcf|grep -v '#'|awk '{print $1,$2,$3,$4,$5,$6,$7,$8}' > antegamisou_rmvdup.variants
+/software/team152/bcftools/bin/./bcftools view tili.poly.biallelic.qc1.bcf|grep -v '#'|awk '{print $1,$2,$3,$4,$5,$6,$7,$8}' > tili.poly.biallelic.qc1.variants
+/software/team152/bcftools/bin/./bcftools view tili.poly.biallelic.qc1.unique.bcf|grep -v '#'|awk '{print $1,$2,$3,$4,$5,$6,$7,$8}' > tili.poly.biallelic.qc1.unique.bcf.variants
+/software/team152/bcftools/bin/./bcftools view tili.poly.biallelic.qc1.T.bcf|grep -v '#'|awk '{print $1,$2,$3,$4,$5,$6,$7,$8}' > tili.poly.biallelic.qc1.T.variants
+
+
+#Once I have a file in bed format, I can use bcftools annotate to do that
+#example: bcftools annotate -c CHROM,FROM,TO,ID -a my_ids.bed.gz   -o output.vcf  input.vcf.gz
+bcftools annotate -c CHROM,FROM,-,ID -a /lustre/scratch115/projects/ibdgwas/aux_files/bed_chr_1.bed.gz   -o /lustre/scratch115/projects/crohns/exome/TIH/exomeseq/tili.poly.biallelic.nomiss.ctrls.rsID.bcf   /lustre/scratch115/projects/crohns/exome/TIH/exomeseq/tili.poly.biallelic.nomiss.ctrls.bcf
+
+
+
+
+#Once we have the filtered file from above, we can add annotation. Atm waiting for Josh to update on ensembl-vep
+# I have also downloaded the latest Vep file, which could (should?) have all annotations? Have a look.
+#All files at /lustre/scratch115/projects/ibdgwas/aux_files/

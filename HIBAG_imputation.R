@@ -3,7 +3,8 @@
 #basefile="/lustre/scratch115/projects/ibdgwas/new_wave/new_wave_qc3b.final.unique.xMHC"  #new wave
 #basefile="/lustre/scratch115/projects/ibdgwas/pre_imputation/qc/GWAS3/gwas3_final.unique.xMHC" #GWAS3
 #basefile="/lustre/scratch115/projects/ibdgwas/pre_imputation/qc/GWAS1/wtccc1_hg19.final.xMHC" #GWAS1
-basefile="/lustre/scratch115/projects/ibdgwas/pre_imputation/qc/GWAS2/wtccc2_hg19.final.xMHC" #GWAS2
+#basefile="/lustre/scratch115/projects/ibdgwas/pre_imputation/qc/GWAS2/wtccc2_hg19.final.xMHC" #GWAS2
+basefile="/lustre/scratch115/projects/ibdgwas/ichip/b37loukas/ichip_b37.final.xMHC" #ichip
 
 ##installation from the tar.gz file for 3.3.0. For example:
 #install.packages("/software/team152/Rpackages/S4Vectors_0.6.6.tar.gz",repos=NULL,type="source",lib="/software/team152/Rpackages/")
@@ -12,7 +13,8 @@ basefile="/lustre/scratch115/projects/ibdgwas/pre_imputation/qc/GWAS2/wtccc2_hg1
 library(HIBAG,lib="/software/team152/Rpackages/")
 #model.list=get(load("/lustre/scratch115/projects/ibdgwas/HLA/imputation_panels/HumanCoreExome-European-HLA4-hg19.RData")) #I have downloaded the prefit parameter set from the HIBAG website.
 #model.list=get(load("/lustre/scratch115/projects/ibdgwas/HLA/imputation_panels/Affy500K-European-HLA4-hg19.RData")) #this should be the one for GWAS1.
-model.list=get(load("/lustre/scratch115/projects/ibdgwas/HLA/imputation_panels/AffySNPv6-European-HLA4-hg19.RData")) #this should be the one for GWAS2.
+#model.list=get(load("/lustre/scratch115/projects/ibdgwas/HLA/imputation_panels/AffySNPv6-European-HLA4-hg19.RData")) #this should be the one for GWAS2.
+model.list=get(load("/lustre/scratch115/projects/ibdgwas/HLA/imputation_panels/ImmunoChip-Broad-HLARES-HLA4-hg19.RData")) #this should be the one for ichip.
 
 #note that I use assembly hg19 (check whether hg19 should be used instead?)
 geno19=hlaBED2Geno(bed.fn=paste(basefile,".bed",sep=""), fam.fn=paste(basefile,".fam",sep=""), bim.fn=paste(basefile,".bim",sep=""),assembly="hg19")

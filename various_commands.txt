@@ -165,3 +165,10 @@ plink --vcf new_wave_qc3b_autosomes.flipped.RefAlt.updated_IDs.fixref.M25.srt.vc
 
 #to check for  duplicates ( I do this in R):
 remove_dups_from_bim.r
+
+
+bcftools annotate \
+  -a genes.bed.gz \
+  -c CHROM,FROM,TO,GENE \
+  -h <(echo '##INFO=<ID=GENE,Number=1,Type=String,Description="Gene name">') \
+  variants.vcf.gz
