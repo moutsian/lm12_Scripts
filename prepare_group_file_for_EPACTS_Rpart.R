@@ -1,8 +1,10 @@
 #prepare_group_file_for_EPACTS_Rpart.R
 chrom=21
-varfile=paste("tili.poly.biallelic.qc1.T.nodup.rsID.annot.vcf.",chrom,".variants",sep="")
-annofile=paste("tili.poly.biallelic.qc1.T.nodup.rsID.final.vcf.annot.",chrom,".annot.fc.tmp",sep="")
-outfile=paste("tili.poly.biallelic.qc1.T.nodup.rsID.annot.vcf.",chrom,".annot.fc.genes.epacts",sep="")
+for(chrom in 1:22){
+print(paste("chrom:",chrom,sep=""))
+varfile=paste("tili.i2.qc.sample_qc3.rsID.annot.vcf.",chrom,".variants",sep="")
+annofile=paste("tili.i2.qc.sample_qc3.rsID.vcf.annot.",chrom,".annot.fc.tmp",sep="")
+outfile=paste("tili.i2.qc.sample_qc3.rsID.annot.vcf.",chrom,".annot.fc.genes.epacts",sep="")
 var_table=read.table(varfile,stringsAsFactors=F)
 anno_table=read.table(annofile,stringsAsFactors=F)
 together=merge(anno_table,var_table,by.x="V1",by.y="V3")
@@ -21,5 +23,5 @@ epacts_table[idx,2]=paste(tmp," ",together[i,2],"_",together[i,17],"/",together[
 test=lapply(epacts_table[,2],function(x) paste(sort(unique(unlist(strsplit((x),split=" ")))),collapse=' '))
 epacts_table=cbind(genes,test)
 write.table(epacts_table,outfile,col.names=F,row.names=F,quote=F,sep="\t")
-
+}
 #END

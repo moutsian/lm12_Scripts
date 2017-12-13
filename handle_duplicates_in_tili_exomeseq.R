@@ -1,9 +1,9 @@
 #deal with duplicates in the exome seq data (bcf file  - tili project)
 #allvariants=read.table("tili.poly.biallelic.nomiss.recode.rs1.variants",stringsAsFactors=F) #these are all the variants in the bcf file
-allvariants=read.table("tili.poly.biallelic.qc1.T.nodup.variants",stringsAsFactors=F)  #this is to see if it has worked
-
-varstokeep=read.table("snps_to_keep_after_hwe_check.txt",stringsAsFactors=F) #this is the list of the variants to keep, after checking for HWE deviations.
-
+#allvariants=read.table("tili.poly.biallelic.v5.gq30.miss10pc.ctrls.variants",stringsAsFactors=F)  #this is to see if it has worked
+allvariants=read.table("tili.i2.pb.gq30.ab1e03.miss10.rs1.bcf.variants",stringsAsFactors=F)
+#varstokeep=read.table("snps_to_keep_after_hwe_check.txt",stringsAsFactors=F) #this is the list of the variants to keep, after checking for HWE deviations.
+varstokeep=allvariants
 #for now I will remove ALL duplicates, since this means that for the same SNP we have more than two alleles (sometimes just a triallelic SNPs, sometimes copy number variations.)
 n_occur=data.frame(table(allvariants[,3]))
 dupvars=n_occur[n_occur$Freq>1,]
@@ -34,9 +34,11 @@ v_idx=c(v_idx,which(varstokeep[,1]==allvariants[idx[cnt],1] & varstokeep[,2]==al
 TOREMOVE[as.numeric(names(which(table(v_idx)>1))),1]=1#flag for removal
 
 
-varstokeep_nodup=varstokeep[which(TOREMOVE[,1]==0),]
-varstokeep_nodup_unique=unique(varstokeep_nodup)
+#varstokeep_nodup=varstokeep[which(TOREMOVE[,1]==0),]
+#varstokeep_nodup_unique=unique(varstokeep_nodup)
+varstoremove_nodup=varstokeep[which(TOREMOVE[,1]==1),c(1,2)]
+varstoremove_nodup_unique=unique(varstoremove_nodup)
 
-write.table(varstokeep_nodup_unique,"snps_to_keep_after_hwe_check_nodup_updated.txt",sep="\t",quote=F,row.names=F,col.names=F)
+write.table(varstoremove_nodup_unique[,c(1,2)],"duplicate_snps_to_remove.txt",sep="\t",quote=F,row.names=F,col.names=F)
 
 #END
