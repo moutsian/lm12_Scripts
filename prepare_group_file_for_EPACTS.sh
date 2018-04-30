@@ -1,8 +1,8 @@
 ##Prepare group file for EPACTS based on ensembl-vep annotation
 
 ##Input
-annofile="tili.i2.qc3binom.hepmix_vs_ctrls.vcf.annot"
-vcffile="tili.i2.qc3binom.sample_qc3.rsID.annot.vcf"
+annofile="tili.i3.site_QC.sample_QC.vcf.annot"
+vcffile="tili.i3.site_QCplus_binom.sample_QC.annot.vcf"
 chrom=20
 
 # ** Note: If annotation list above is modified, the code will need to be edited **

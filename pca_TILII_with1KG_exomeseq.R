@@ -1,7 +1,7 @@
 setwd("C:/Academic/SANGER/TILI/exomeseq/")
 #this is prior to any filtering, for the re-organised version
-pca=read.table("TILI_1KG.30.i2.evec",head=F,stringsAsFactors=F) 
-fam=read.table("TILI_1KG_forPCA.i2.fam",stringsAsFactors=F)
+pca=read.table("TILI_1KG.30.i3.evec",head=F,stringsAsFactors=F) 
+fam=read.table("TILI_1KG_forPCA.i3.fam",stringsAsFactors=F)
 
 
 pcafam=cbind(pca,fam[,c(1,2,6)])
@@ -95,50 +95,60 @@ abline(v=-0.016,col="darkgrey",lty=2)
 #abline(h=-0.0075,col="darkgrey",lty=2)
 #abline(v=-0.075,col="darkgrey",lty=2)
 #following will just colour the sanger samples in a different colour, to check pc5-pc6 plot.
-sanger=grepl("_",pcafam[,34])
+#sanger=grepl("_",pcafam[,34])
 #points(pcafam[sanger,pc1+1],pcafam[sanger,pc2+1],pch=4,col="orange")
-
 ##### 30OCT: REMOVAL PROCESS:
 
-toremove_pc1_cases=which(pcafam[pca_cases_idx,1+1]<0.012)
-toremove_pc1_ctrls=which(pcafam[pca_ctrls_idx,1+1]<0.012)
+toremove_pc1_cases=which(pcafam[pca_cases_idx,1+1]<0.0095)
+toremove_pc1_ctrls=which(pcafam[pca_ctrls_idx,1+1]<0.0095)
 
-toremove_pc2_cases=which(pcafam[pca_cases_idx,2+1]<0.013)
-toremove_pc2_ctrls=which(pcafam[pca_ctrls_idx,2+1]<0.013)
+toremove_pc2_cases=which(pcafam[pca_cases_idx,2+1]<0.007)
+toremove_pc2_ctrls=which(pcafam[pca_ctrls_idx,2+1]<0.007)
 
-toremove_pc3_ctrls=which(pcafam[pca_ctrls_idx,3+1]< 0.0018)
-toremove_pc3_cases=which(pcafam[pca_cases_idx,3+1]< 0.0018)
+toremove_pc3_ctrls=which(pcafam[pca_ctrls_idx,3+1]< 0.0005)
+toremove_pc3_cases=which(pcafam[pca_cases_idx,3+1]< 0.0005)
 
-toremove_pc4_ctrls=which(pcafam[pca_ctrls_idx,4+1]< 0.002)
-toremove_pc4_cases=which(pcafam[pca_cases_idx,4+1]< 0.002)
+toremove_pc4_ctrls=which(pcafam[pca_ctrls_idx,4+1]< -0.0005)
+toremove_pc4_cases=which(pcafam[pca_cases_idx,4+1]< -0.0005)
 
-toremove_pc5_ctrls=which(pcafam[pca_ctrls_idx,5+1]< -0.009)
-toremove_pc5_cases=which(pcafam[pca_cases_idx,5+1]< -0.009)
-toremove_pc5b_ctrls=which(pcafam[pca_ctrls_idx,5+1]> 0.018)
-toremove_pc5b_cases=which(pcafam[pca_cases_idx,5+1]> 0.018)
+toremove_pc5_ctrls=which(pcafam[pca_ctrls_idx,5+1]< -0.015)
+toremove_pc5_cases=which(pcafam[pca_cases_idx,5+1]< -0.015)
+toremove_pc5b_ctrls=which(pcafam[pca_ctrls_idx,5+1]> 0.01)
+toremove_pc5b_cases=which(pcafam[pca_cases_idx,5+1]> 0.01)
 
-toremove_pc6_ctrls=which(pcafam[pca_ctrls_idx,6+1]> 0.007)
-toremove_pc6_cases=which(pcafam[pca_cases_idx,6+1]> 0.007)
-toremove_pc6b_ctrls=which(pcafam[pca_ctrls_idx,6+1]< -0.035)
-toremove_pc6b_cases=which(pcafam[pca_cases_idx,6+1]< -0.035)
-
-
-toremove_pc7_ctrls=which(pcafam[pca_ctrls_idx,7+1]<  -0.016)
-toremove_pc7_cases=which(pcafam[pca_cases_idx,7+1] < -0.016)
+toremove_pc6_ctrls=which(pcafam[pca_ctrls_idx,6+1]> 0.02)
+toremove_pc6_cases=which(pcafam[pca_cases_idx,6+1]> 0.02)
+toremove_pc6b_ctrls=which(pcafam[pca_ctrls_idx,6+1]< -0.009)
+toremove_pc6b_cases=which(pcafam[pca_cases_idx,6+1]< -0.009)
 
 
-toremove_pc8_ctrls=which(pcafam[pca_ctrls_idx,8+1]>0.023)
-toremove_pc8_cases=which(pcafam[pca_cases_idx,8+1]>0.023)
+toremove_pc7_ctrls=which(pcafam[pca_ctrls_idx,7+1]<  -0.017)
+toremove_pc7_cases=which(pcafam[pca_cases_idx,7+1] < -0.017)
+toremove_pc7b_ctrls=which(pcafam[pca_ctrls_idx,7+1] > 0.0165)
+toremove_pc7b_cases=which(pcafam[pca_cases_idx,7+1] > 0.0165)
+
+toremove_pc8_ctrls=which(pcafam[pca_ctrls_idx,8+1]>0.02)
+toremove_pc8_cases=which(pcafam[pca_cases_idx,8+1]>0.02)
+toremove_pc8b_ctrls=which(pcafam[pca_ctrls_idx,8+1]< -0.018)
+toremove_pc8b_cases=which(pcafam[pca_cases_idx,8+1]< -0.018)
+
+toremove_pc9_ctrls=which(pcafam[pca_ctrls_idx,9+1]< -0.0275)
+toremove_pc9_cases=which(pcafam[pca_cases_idx,9+1]< -0.0275)
+
+toremove_pc10_ctrls=which(pcafam[pca_ctrls_idx,10+1]>0.035)
+toremove_pc10_cases=which(pcafam[pca_cases_idx,10+1]>0.035)
+toremove_pc10b_ctrls=which(pcafam[pca_ctrls_idx,10+1]< -0.035)
+toremove_pc10b_cases=which(pcafam[pca_cases_idx,10+1]< -0.035)
 
 
-toremove_cases=unique(c(toremove_pc1_cases,toremove_pc2_cases,toremove_pc3_cases,toremove_pc4_cases,toremove_pc5_cases,toremove_pc5b_cases,toremove_pc6_cases,toremove_pc6b_cases,toremove_pc7_cases,toremove_pc8_cases))
-toremove_ctrls=unique(c(toremove_pc1_ctrls,toremove_pc2_ctrls,toremove_pc3_ctrls,toremove_pc4_ctrls,toremove_pc5_ctrls,toremove_pc5b_ctrls,toremove_pc6_ctrls,toremove_pc6b_ctrls,toremove_pc7_ctrls,toremove_pc8_ctrls))
+toremove_cases=unique(c(toremove_pc1_cases,toremove_pc2_cases,toremove_pc3_cases,toremove_pc4_cases,toremove_pc5_cases,toremove_pc5b_cases,toremove_pc6_cases,toremove_pc6b_cases,toremove_pc7_cases,toremove_pc7b_cases,toremove_pc8_cases,toremove_pc8b_cases,toremove_pc9_cases,toremove_pc10_cases,toremove_pc10b_cases))
+toremove_ctrls=unique(c(toremove_pc1_ctrls,toremove_pc2_ctrls,toremove_pc3_ctrls,toremove_pc4_ctrls,toremove_pc5_ctrls,toremove_pc5b_ctrls,toremove_pc6_ctrls,toremove_pc6b_ctrls,toremove_pc7_ctrls,toremove_pc7b_ctrls,toremove_pc8_ctrls,toremove_pc8b_ctrls,toremove_pc9_ctrls,toremove_pc10_ctrls,toremove_pc10b_ctrls))
 
 #these are the cases and controls to be removed:
 pcafam[pca_cases_idx[toremove_cases],33:34]
 pcafam[pca_ctrls_idx[toremove_ctrls],33:34]
-write.table(pcafam[pca_ctrls_idx[toremove_ctrls],33:34],"ctrls_to_remove_due_to_PCA_exomeseq.i2.txt",quote=F,col.names=F,row.names=F)
-write.table(pcafam[pca_cases_idx[toremove_cases],33:34],"cases_to_remove_due_to_PCA_exomeseq.i2.txt",quote=F,col.names=F,row.names=F)
+write.table(pcafam[pca_ctrls_idx[toremove_ctrls],33:34],"ctrls_to_remove_due_to_PCA_exomeseq.i3.txt",quote=F,col.names=F,row.names=F)
+write.table(pcafam[pca_cases_idx[toremove_cases],33:34],"cases_to_remove_due_to_PCA_exomeseq.i3.txt",quote=F,col.names=F,row.names=F)
 ##replot
 
 

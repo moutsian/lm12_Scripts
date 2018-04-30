@@ -2,9 +2,9 @@
 chrom=21
 for(chrom in 1:22){
 print(paste("chrom:",chrom,sep=""))
-varfile=paste("tili.i2.qc.sample_qc3.rsID.annot.vcf.",chrom,".variants",sep="")
-annofile=paste("tili.i2.qc.sample_qc3.rsID.vcf.annot.",chrom,".annot.fc.tmp",sep="")
-outfile=paste("tili.i2.qc.sample_qc3.rsID.annot.vcf.",chrom,".annot.fc.genes.epacts",sep="")
+varfile=paste("tili.i3.site_QCplus_binom.sample_QC.annot.vcf.",chrom,".variants",sep="")
+annofile=paste("tili.i3.site_QC.sample_QC.vcf.annot.",chrom,".annot.fc.tmp",sep="")
+outfile=paste("tili.i3.site_QC.sample_QC.",chrom,".annot.fc.genes.epacts",sep="")
 var_table=read.table(varfile,stringsAsFactors=F)
 anno_table=read.table(annofile,stringsAsFactors=F)
 together=merge(anno_table,var_table,by.x="V1",by.y="V3")

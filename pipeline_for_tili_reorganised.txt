@@ -356,6 +356,10 @@ snptest -data  TILI_merged.qc1e.gen TILI_merged.qc1e.samplee -exclude_samples au
 snptest -data  TILI_merged.qc1e.gen TILI_merged.qc1e.samplee -exclude_samples aux_and_intermediate_files/probable_cases.txt -o output/TILI_merged.qc1e.definite.snptest_output.txt -frequentist 1  -cov_names pc1 pc2 pc3 pc4 -pheno phenotype -method score 
 
 
+## Jan2018 rerun for cholmix and hepmix, using the same sample lists as we did for the exomeseq data (of course note that many ctrls will not be present in this set)
+snptest -data  TILI_merged.qc1e.gen TILI_merged.qc1e.samplee -exclude_samples exomeseq/cholestatic_cases.txt -o output/TILI_merged.qc1e.hepmix.snptest_output.txt -frequentist 1  -cov_names pc1 pc2 pc3 pc4 -pheno phenotype -method score 
+snptest -data  TILI_merged.qc1e.gen TILI_merged.qc1e.samplee -exclude_samples exomeseq/hepatocellular_cases.txt -o output/TILI_merged.qc1e.cholmix.snptest_output.txt -frequentist 1  -cov_names pc1 pc2 pc3 pc4 -pheno phenotype -method score 
+
 #####################################################
 #trying GEMMA for association testing with univariate LMMs
 /software/team152/./gemma.linux -bfile TILI_merged.qc4 -gk 2 -o TILI_merged.qc4
